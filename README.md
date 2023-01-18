@@ -50,3 +50,18 @@ They should also be able to access a photo or video gallery and purchase team me
 The website will be built using:
 HTML, CSS, JavaScript, and Bootstrap for the front-end, 
 and PHP OOP and SQL for the back-end. 
+
+# ___________________________
+
+## User stories:
+
+- As a fan, I want to be able to access a photo or video gallery, so that I can see pictures and videos of the team in action.
+- As a fan, I want to be able to purchase team merchandise, so that I can show my support for the team.
+- As a player, I want to be able to edit my own profile on the website, so that I can share information about my career and achievements.
+- As a player, I want to be able to view the schedule, stats, and results for my sport, so that I can stay informed about the team's upcoming games and performance.
+- As a sub-admin, I want to be able to manage the content, stats, results, and features specific to my sport, so that I can ensure that the website is up-to-date and accurate for my sport.
+- As a sub-admin, I want to be able to create and edit player profiles, so that I can accurately represent the players on the team.
+- As a sub-admin, I want to be able to manage a photo or video gallery for my sport, so that I can share pictures and videos of the team in action.
+- As an admin, I want to be able to add and edit content, so that I can ensure that the website is up-to-date and accurate.
+- As an admin, I want to be able to manage user accounts, so that I can ensure that only authorized users have access to the website's features.
+- As an admin, I want to be able to create and assign roles to sub-admins, so that I can delegate responsibilities to the appropriate users.
