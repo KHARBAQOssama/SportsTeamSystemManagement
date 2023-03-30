@@ -20,6 +20,11 @@ class User extends Authenticatable implements JWTSubject
     public function sport(){
         return $this->belongsTo(Sport::class);
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
     /**
      * The attributes that are mass assignable.
      *

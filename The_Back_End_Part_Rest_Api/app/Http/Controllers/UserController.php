@@ -13,10 +13,11 @@ use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:api', ['except' => ['store']]);
-    // }
+    public function __construct()
+    {
+        // $this->middleware('auth:api', ['except' => ['store']]);
+        $this->middleware('permission:add user');
+    }
     /**
      * Display a listing of the resource.
      */

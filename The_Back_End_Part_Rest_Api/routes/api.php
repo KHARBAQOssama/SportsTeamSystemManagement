@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +37,12 @@ Route::post('user/{user}/updateImage',[UserController::class,'updateUserImage'])
 Route::post('user/search',[UserController::class,'getBySearch']);
 Route::post('users/add',[UserController::class,'storeByAdmin']);
 Route::apiResource('user',UserController::class);
+
+
+Route::get('sport/community',[SportController::class,'authenticatedSportUsers']);
+Route::get('sport/users',[SportController::class,'getSportUsers']);
+Route::apiResource('sport',SportController::class);
+
+
+Route::post('team/search',[TeamController::class,'getBySearch']);
+Route::apiResource('team',TeamController::class);
