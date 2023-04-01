@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Game extends Model
+{
+    use HasFactory;
+
+    public function tournament(){
+        return $this->belongsTo(Tournament::class);
+    }
+
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
+    }
+
+    protected $fillable = [
+        'home',
+        'home_score',
+        'away',
+        'away_score',
+        'played',
+        'round',
+        'fans',
+        'date',
+        'start_time',
+        'referee',
+        'referee1',
+        'referee2',
+        'referee3',
+        'tournament_id',
+        'seats_number',
+        'seats_available',
+        'ticket_price',
+        // 'created_by',
+        // 'updated_by',
+    ];
+}

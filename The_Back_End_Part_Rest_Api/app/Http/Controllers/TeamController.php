@@ -53,7 +53,7 @@ class TeamController extends Controller
             $credentials['image_url']   = $url;
         }
 
-        $sport = Team::create($credentials);
+        $team = Team::create($credentials);
         
         return response()->json([
             'message' => 'team added successfully'

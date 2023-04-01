@@ -25,7 +25,7 @@ class StoreUserRequest extends FormRequest
             'first_name'    => 'required|string',
             'last_name'     => 'required|string',
             'email'         => 'required|email|unique:users,email',
-            'birth_day'     => 'required|date',
+            'birth_day'     => 'required|date|before:' . date('Y-m-d', strtotime('-15 years')),
             'password'      => 'required|string|min:8|confirmed',
             'image_url'     => 'nullable|url',
         ];

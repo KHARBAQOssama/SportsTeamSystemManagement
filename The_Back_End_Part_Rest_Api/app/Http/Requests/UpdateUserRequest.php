@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
         $rules = [
             'first_name'    => 'required|string',
             'last_name'     => 'required|string',
-            'birth_day'     => 'required|date',
+            'birth_day'     => 'required|date|before:' . date('Y-m-d', strtotime('-15 years')),
             'password'      => 'required|string|min:8',
             'image_url'     => 'nullable|url',
         ];

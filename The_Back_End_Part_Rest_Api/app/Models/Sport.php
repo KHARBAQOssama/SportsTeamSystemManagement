@@ -13,6 +13,10 @@ class Sport extends Model
         return $this->hasMany(User::class);
     }
 
+    public function tournaments(){
+        return $this->hasMany(Tournament::class);
+    }
+
     protected $fillable = [
         'name',
         'icon'

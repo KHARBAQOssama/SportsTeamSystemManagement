@@ -3,9 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SportController;
+use App\Http\Controllers\TournamentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +48,8 @@ Route::apiResource('sport',SportController::class);
 
 Route::post('team/search',[TeamController::class,'getBySearch']);
 Route::apiResource('team',TeamController::class);
+
+
+Route::apiResource('tournament',TournamentController::class);
+
+Route::get('games-in-sport',[GameController::class,'getGamesInSport']);
