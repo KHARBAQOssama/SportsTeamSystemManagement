@@ -70,8 +70,8 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'success' => 'Account has been created successfully',
-            $user,
+            'message' => 'Account has been created successfully',
+            'user' => $user,
         ],201);
     }
 
