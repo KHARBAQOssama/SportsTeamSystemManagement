@@ -17,4 +17,16 @@ class Team extends Model
         'stadium',
         'image_url'
     ];
+
+    public static function ourTeam(){
+        $credentials = [
+            'name' => 'Olympic Club Youssoufia',
+            'slag' => 'OCY',
+            'city' => 'YOUSSOUFIA',
+            'country' => 'MOROCCO',
+            'stadium' => 'DAKHLA STADIUM',
+        ];
+
+        return Team::where($credentials)->first();
+    }
 }

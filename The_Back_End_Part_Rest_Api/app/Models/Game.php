@@ -17,6 +17,10 @@ class Game extends Model
         return $this->hasMany(Reservation::class);
     }
 
+    public function sport(){
+        return $this->belongsTo(Sport::class);
+    }
+
     protected $fillable = [
         'home',
         'home_score',
@@ -35,7 +39,9 @@ class Game extends Model
         'seats_number',
         'seats_available',
         'ticket_price',
-        // 'created_by',
-        // 'updated_by',
+        'sport_id',
+        'game_place',
+        'created_by',
+        'updated_by',
     ];
 }

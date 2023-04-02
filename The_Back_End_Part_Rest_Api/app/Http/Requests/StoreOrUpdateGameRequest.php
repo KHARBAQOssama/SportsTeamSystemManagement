@@ -22,14 +22,8 @@ class StoreOrUpdateGameRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'home',
-            'away',
-            'fans',
-            'date',
-            'start_time',
-            'seats_number',
-            'seats_available',
-            'ticket_price',
+            'date' => 'required|date|after:today',
+            'start_time' => 'required',
         ];
     }
 }

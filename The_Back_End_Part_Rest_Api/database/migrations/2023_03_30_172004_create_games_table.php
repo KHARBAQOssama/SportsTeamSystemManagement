@@ -30,14 +30,16 @@ return new class extends Migration
             $table->boolean('fans')->default(1);
             $table->integer('seats_number')->nullable();
             $table->integer('seats_available')->nullable();
-            $table->unsignedBigInteger('tournament_id');
+            $table->unsignedBigInteger('sport_id');
+            $table->foreign('sport_id')->references('id')->on('sports')->onDelete('cascade');
+            $table->unsignedBigInteger('tournament_id')->nullable();
             $table->foreign('tournament_id')->references('id')->on('tournaments')->onDelete('cascade');
-            $table->integer('round');
-            $table->double('ticket_price');
-            // $table->unsignedBigInteger('created_by');
-            // $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-            // $table->unsignedBigInteger('updated_by');
-            // $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('round')->nullable();
+            $table->double('ticket_price')->default(0)->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

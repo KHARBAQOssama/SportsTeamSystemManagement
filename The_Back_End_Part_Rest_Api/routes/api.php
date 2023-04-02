@@ -50,6 +50,9 @@ Route::post('team/search',[TeamController::class,'getBySearch']);
 Route::apiResource('team',TeamController::class);
 
 
+Route::get('tournament/{id}/standing',[TournamentController::class,'tournamentStandings']);
 Route::apiResource('tournament',TournamentController::class);
 
 Route::get('games-in-sport',[GameController::class,'getGamesInSport']);
+Route::get('games/next',[GameController::class,'nextGame']);
+Route::apiResource('game',GameController::class);
