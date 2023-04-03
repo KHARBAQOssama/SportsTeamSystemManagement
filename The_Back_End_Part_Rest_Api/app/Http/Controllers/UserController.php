@@ -61,6 +61,14 @@ class UserController extends Controller
             'image_url'   => '/storage/images/userDefaultImage.png'
         ];
 
+        if($request->file('image')){
+            $path                       = $request->file('image')->store('public/images');
+            $url                        = Storage::url($path);
+            $credentials['image_url']   = $url;
+        }else{
+            $credentials['image_url']   = 'http://localhost/storage/images/userDefaultImage.png';
+        }
+
         $user = User::create($credentials);
 
         if(!$user){
