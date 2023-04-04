@@ -1,11 +1,14 @@
 <?php
 
+use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\TournamentController;
 
@@ -55,4 +58,9 @@ Route::apiResource('tournament',TournamentController::class);
 
 Route::get('games-in-sport',[GameController::class,'getGamesInSport']);
 Route::get('games/next',[GameController::class,'nextGame']);
+Route::post('image',[PhotoController::class,'store']);
+Route::get('images',[PhotoController::class,'get']);
 Route::apiResource('game',GameController::class);
+
+
+

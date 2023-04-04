@@ -1,47 +1,109 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <!-- <div>
+    <form @submit="formSubmit" enctype="multipart/form-data">
+      <img v-show="imageUrl" :src="baseURL + imageUrl" alt="">
+      <input type="file" class="form-control" v-on:change="onChange">
+      <button class="btn btn-primary btn-block">Upload</button>
+  </form>
+    <form @submit.prevent="login" enctype="multipart/form-data">
+      <input type="text" v-model="email">
+      <input type="password" v-model="password">
+      <button class="btn btn-primary btn-block">login</button>
+  </form>
+  <div>
+    <div v-if="user">{{ user.first_name }} <img :src="baseURL + user.image_url" height="30" alt=""></div>
+    <div v-if="user">{{ user.last_name }} </div>
+    <div v-if="user">{{ user.id }} </div>
+    <div v-if="user">{{ user.email }} </div>
+  </div>
+      <div v-for="user in users" :key="user.id">{{ user.first_name }} </div>
+  </div> -->
+  <MyNavbar></MyNavbar>
+  <LandingGames></LandingGames>
+  <JoinUs></JoinUs>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script>
+import api from '@/api';
+import { useUserStore } from './stores/userStore';
+import { useAuthStore } from './stores/authStore';
+import MyNavbar from './components/Navbar.vue'
+import LandingGames from './components/LandingGames.vue'
+import JoinUs from './components/JoinUs.vue'
+import Footer from './components/Footer.vue'
+export default {
+        components:{
+          MyNavbar,
+          Footer,
+          JoinUs,
+          LandingGames
+        },
+        data() {
+            return {
+                imageUrl: null,
+                image: '',
+                success: '',
+                baseURL: 'http://localhost:8000',
+                email: '',
+                password: '',
+            };
+        },
+        
+        // mounted(){
+        //   useUserStore().fetchUsers();
+        // },
+        
+        // computed:{
+        //     users(){
+        //       return useUserStore().users
+        //     },
+        //     user(){
+        //       return useAuthStore().user
+        //     },
+        //     async images(){
+        //         await api.get('/images')
+        //             .then(function (res) {
+        //                 console.log(res.data);
+        //                 return res.data
+        //             })
+        //             .catch(function (err) {
+        //                 console.log(err)
+        //             });
+        //     },
+        // },
+        // methods: {
+        //     onChange(e) {
+        //         this.image = e.target.files[0];
+        //     },
+        //     formSubmit(e) {
+        //         e.preventDefault();
+        //         let existingObj = this;
+        //         let data = new FormData();
+        //         data.append('image', this.image);
+        //         api.post('/image', data)
+        //             .then(function (res) {
+        //                 existingObj.imageUrl = res.data.url
+        //                 console.log(res.data.url)
+        //             })
+        //             .catch(function (err) {
+        //                 console.log(err)
+        //             });
+        //     },
+        //     login(){
+        //       let data = new FormData();
+        //       data.append('email', this.email);
+        //       data.append('password', this.password);
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+        //       useAuthStore().login(data);
+        //     }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+        // }
+    }
+</script>
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+<style lang="scss" scoped>
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
+
+
