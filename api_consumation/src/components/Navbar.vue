@@ -1,13 +1,28 @@
 <template>
-  <nav class="d-flex px-5 align-items-center position-absolute top-0 bg-transparent">
-    <img src="../assets/images/logo.png" class="me-auto" height="30" alt="">
-    <div class="d-flex justify-content-around ms-auto">
-        <a href="#" class="ms-4"><div class="fs-5">News</div></a>
-        <a href="#" class="ms-4"><div class="fs-5">Store</div></a>
-        <a href="#" class="ms-4"><div class="fs-5">Contact Us</div></a>
-        <a href="#" class="ms-4"><div class="fs-5">About</div></a>
+  <nav class="navbar navbar-expand-lg bg-white shadow">
+    <div class="container-fluid p-0">
+      <a class="navbar-brand ms-3 logo-link" href="#"><img src="../assets/images/logo.png" height="45px" class="me-2" alt="">STM</a>
+      <button class="navbar-toggler ms-auto me-5 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="uil uil-location-arrow-alt"></i>
+      </button>
+      <div class="collapse navbar-collapse px-4 pe-5 bg-white mt-3" id="navbarTogglerDemo01">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Store</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </nav>
+</nav>
 </template>
 
 <script>
@@ -17,12 +32,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-nav{
-    height: 65px;
-    width: 100vw;
-    a:hover div{
-        color: rgb(255, 208, 0);
-        text-shadow: 0 0 3px rgba(255, 255, 255, 0.603);
-    }
+.logo-link{
+  color: goldenrod;
+  font-size: 35px;
+  font-weight: lighter;
 }
+.nav-link{
+  color: white;
+  text-shadow: 0 0 5px rgb(37, 30, 11);
+  font-size: 18px;
+}
+.nav-link:hover{
+  color: goldenrod;
+  text-shadow: 0;
+}
+.navbar-toggler{ 
+  transition: all 0.3s;
+  &:focus{
+    box-shadow: 0 !important;
+  }
+  i{
+    color: goldenrod;
+  }
+}
+.collapsed{
+  transform: rotate(180deg) !important;
+}
+
 </style>

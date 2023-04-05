@@ -12,6 +12,9 @@ a{
   color: white;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
 }
+li{
+  list-style: none;
+}
 body{
   position: relative;
   overflow-y: scroll;

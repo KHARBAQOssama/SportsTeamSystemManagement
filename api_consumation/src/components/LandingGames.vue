@@ -1,18 +1,5 @@
 <template>  
-    <div id="landing-games" class="bg-dark d-flex justify-content-center align-items-center">
-        <div id="game" class="mt-auto mb-2 h-75">
-            <div class="h-75 text-white d-flex align-items-center justify-content-center">
-                <img class="h-75 mx-3" :src="currentGame.home" alt="">
-                <img class="h-75 mx-3" :src="currentGame.away" alt="">
-            </div>
-            <div class="h-25 d-flex flex-column">
-                <div class="h-50 d-flex justify-content-around">
-                    <div class="text-white mx-2"><i class="fs-5 me-1 uil uil-calender"></i>{{currentGame.date}}</div>
-                    <div class="text-white mx-2"><i class="fs-5 me-1 uil uil-clock"></i>{{currentGame.time}}</div>
-                </div>
-                <div class="h-50 text-white text-center mx-2"><i class="fs-5 me-1 uil uil-map-marker-shield"></i>{{currentGame.stadium}}</div>
-            </div>
-        </div>
+    <div id="landing-games" class="d-flex justify-content-center align-items-center">
     </div>
 </template>
 
@@ -73,21 +60,17 @@ export default {
 
 <style lang="scss" scoped>
 #landing-games {
-    background-image: url(../assets/images/3185113.jpg);
+    background-color: goldenrod;
     height: 60vh;
     width: 100vw;
     transition: all .3s ;
+    img{
+      // filter: drop-shadow(5px 5px 15px #12121275);
+      filter: drop-shadow(2px 2px 0 black) 
+          drop-shadow(-2px -2px 0 black);
+    }
     #game{
 
     }
-//     div{
-//         height: 80%;
-//         img{
-//             height: 90%;
-//         }
-//         #info{
-//             max-width: 360px;
-//         }
-//     }
 }
 </style>

@@ -15,7 +15,6 @@ export const useUserStore = defineStore('user', {
             }).catch((err) => {
                 console.log(err);
             });
-      
     },
 
     async createUser(user) {
