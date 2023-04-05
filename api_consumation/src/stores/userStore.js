@@ -4,7 +4,9 @@ import api from '@/api'
 export const useUserStore = defineStore('user', {
   state: () => ({
     users: [],
-    currentUser: null
+    currentUser: null,
+    user: null,
+    message : null
   }),
   actions: {
     fetchUsers() {
@@ -17,9 +19,21 @@ export const useUserStore = defineStore('user', {
             });
     },
 
+    async signUp(user) {
+      await api.post('/user', user)
+      .then((response)=>{
+        console.log(response.data.message);
+      })
+      .catch((error)=>{
+        console.log(error.data);
+      })
+      
+      this.message = response.data.message;
+    },
+
     async createUser(user) {
       const response = await api.post('/users', user)
-      this.users.push(response.data)
+      this.user.push(response.data.user)
     },
 
     async updateUser(user) {

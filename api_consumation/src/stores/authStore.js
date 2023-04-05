@@ -6,8 +6,8 @@ export const useAuthStore = defineStore('auth', {
     user: null
   }),
   actions: {
-    login(data) {
-        api.post('/auth/login',data)
+    async login(data) {
+        await api.post('/auth/login',data)
         .then((response) => {
             console.log(response.data)
             this.user = response.data
