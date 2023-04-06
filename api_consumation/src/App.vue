@@ -20,7 +20,8 @@
       <div v-for="user in users" :key="user.id">{{ user.first_name }} </div>
   </div> -->
   <!-- <MyNavbar></MyNavbar> -->
-<SignPage></SignPage>
+<!-- <SignPage></SignPage> -->
+<AddTournamentForm></AddTournamentForm>
   <!-- <LandingGames></LandingGames>
   <JoinUs></JoinUs> -->
 </template>
@@ -31,6 +32,7 @@ import { useUserStore } from './stores/userStore';
 import { useAuthStore } from './stores/authStore';
 import MyNavbar from './components/Navbar.vue'
 import LandingGames from './components/LandingGames.vue'
+import AddTournamentForm from './components/AddTournamentForm.vue'
 import SignPage from './views/SignPage.vue'
 import JoinUs from './components/JoinUs.vue'
 import Footer from './components/Footer.vue'
@@ -40,6 +42,7 @@ export default {
           Footer,
           JoinUs,
           LandingGames,
+          AddTournamentForm,
           SignPage
         },
         data() {

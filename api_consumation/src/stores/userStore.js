@@ -23,12 +23,13 @@ export const useUserStore = defineStore('user', {
       await api.post('/user', user)
       .then((response)=>{
         console.log(response.data.message);
+        this.message = response.data.message;
       })
       .catch((error)=>{
         console.log(error.data);
       })
       
-      this.message = response.data.message;
+      
     },
 
     async createUser(user) {
