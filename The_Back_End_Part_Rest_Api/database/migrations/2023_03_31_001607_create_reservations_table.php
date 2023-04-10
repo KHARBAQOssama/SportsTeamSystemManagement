@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('game_id');
             $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
-            $table->date('date');
             $table->integer('tickets_number');
             $table->double('total_price');
             $table->string('status')->default("pending");

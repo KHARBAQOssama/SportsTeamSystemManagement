@@ -13,10 +13,13 @@ class Reservation extends Model
         return $this->belongsTo(Game::class);
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
     protected $fillable = [
         'user_id',
         'game_id',
-        'date',
         'tickets_number',
         'total_price',
         'status',
