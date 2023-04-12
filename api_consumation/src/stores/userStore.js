@@ -42,6 +42,15 @@ export const useUserStore = defineStore('user', {
       const index = this.users.findIndex(u => u.id === user.id)
       this.users.splice(index, 1, response.data)
     },
+    async updateSelfImage(image) {
+      await api.post(`/user/updateImage`, image)
+      .then((response)=>{
+        console.log(response)
+      })
+      .catch((error)=>{
+        console.log(error)
+      })
+    },
 
     async deleteUser(user) {
       await api.delete(`/users/${user.id}`)

@@ -1,11 +1,11 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-white shadow">
+  <nav class="navbar navbar-expand-lg w-100 bg-black mb-auto">
     <div class="container-fluid p-0">
       <a class="navbar-brand ms-3 logo-link" href="#"><img src="../assets/images/logo.png" height="45px" class="me-2" alt="">STM</a>
       <button class="navbar-toggler ms-auto me-5 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
         <i class="uil uil-location-arrow-alt"></i>
       </button>
-      <div class="collapse navbar-collapse px-4 pe-5 bg-white mt-3" id="navbarTogglerDemo01">
+      <div class="collapse navbar-collapse px-4 pe-5 bg-black mt-3" id="navbarTogglerDemo01">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link" href="#">Home</a>

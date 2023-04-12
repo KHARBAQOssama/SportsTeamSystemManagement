@@ -5,6 +5,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins','sans-serif';
+  animation: all .5s;
+  -webkit-animation: all .5s;
 }
 
 a{
@@ -17,20 +19,154 @@ li{
 }
 body{
   position: relative;
-  overflow-y: scroll;
-  overflow-x: hidden;
   height: 100vh;
   width: 100vw;
 }
 #app{
   width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
   position: relative;
+}
+
+
+
+input[type="file"] {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+input[type="file"] + label {
+  font-size: .7em;
+  font-weight: light;
+  padding: .4em;
+  color: black;
+  background-color: goldenrod;
+  display: inline-block;
+  cursor: pointer;
+  border: 2px solid goldenrod;
+  width: 100%;
+}
+
+input[type="file"]:focus + label,
+input[type="file"] + label:hover {
+  background-color: rgb(255, 255, 255);
+  color: goldenrod;
+}
+
+.search-display{
+  max-height: 30vh !important;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: rgba(218, 165, 32, 0.221);
+}
+.search-display div{
+  height: 1.4rem;
+  overflow: hidden;
+}
+.search-display div:hover{
+  color: goldenrod;
+}
+
+.one-line-height{
+  height: 1.2em;
+  overflow: hidden;
+  font-size: 1em;
+}
+
+.item-choosed{
+  background-color: rgba(218, 165, 32, 0.057);
+  border: 2px solid goldenrod;
+}
+
+.item-choosed p{
+  color: goldenrod;
+}
+.event-button{
+  border: none;
+  background-color: transparent;
+  transition: all .3s;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  -o-transition: all .3s;
+
+}
+.delete-button{
+  color: goldenrod;  
+  font-size: large;
+}
+.cancel-button{
+  font-size: larger;
+  transform: rotate(180deg);
+  color: rgba(218, 165, 32, 0.413);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+}
+.delete-button:hover > i {
+  color: rgb(248, 37, 37);
+}
+.cancel-button:hover > i {
+  color: goldenrod;
+}
+.bg-gold{
+  background-color: goldenrod;
+}
+.bg-gold-300{
+  background-color: rgba(218, 165, 32, 0.3);
+}
+
+.brand-black-button{
+  background-color: black;
+  color: goldenrod;
+  padding: .3em 1em;
+  margin: .6em;
+  border: 2px solid rgba(0, 0, 0, 0) !important;
+}
+.brand-black-button:hover{
+  background-color: transparent;
+  color: black;
+  border: 2px solid black !important;
+}
+.brand-gold-button{
+  background-color: white !important;
+  color: goldenrod;
+  padding: .3em 1em;
+  margin: .6em;
+}
+.border{
+  border: 2px solid goldenrod !important;
+}
+
+/* width */
+body::-webkit-scrollbar,#app::-webkit-scrollbar {
+  width: 0px !important;
+  height: 0px !important;
+}
+
+/* Track */
+body::-webkit-scrollbar-track,#app::-webkit-scrollbar-track {
+  background: goldenrod;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+/* Handle */
+body::-webkit-scrollbar-thumb,#app::-webkit-scrollbar-thumb {
+  background: none;
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 4px ;
+  height: 4px ;
 }
 
 /* Track */
@@ -42,5 +178,54 @@ body{
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: white;
+  background: black;
+}
+.text-gold{
+  color: goldenrod;
+}
+
+.text-slider {
+  overflow: hidden;
+}
+
+.text-slider p {
+  white-space: nowrap;
+  text-align: center;
+  animation: slideText 15s linear infinite;
+  -webkit-animation: slideText 15s linear infinite;
+}
+
+@keyframes slideText {
+  0% {
+    transform: translateX(10%);
+    -webkit-transform: translateX(10%);
+    -moz-transform: translateX(10%);
+    -ms-transform: translateX(10%);
+    -o-transform: translateX(10%);
+}
+  50% {
+    transform: translateX(-120%);
+    -webkit-transform: translateX(-120%);
+    -moz-transform: translateX(-120%);
+    -ms-transform: translateX(-120%);
+    -o-transform: translateX(-120%);
+}
+  100% {
+    transform: translateX(10%);
+    -webkit-transform: translateX(10%);
+    -moz-transform: translateX(10%);
+    -ms-transform: translateX(10%);
+    -o-transform: translateX(10%);
+}
+}
+.white-brand-button{
+  padding: .3em .7em;
+  border: 2px solid white;
+  color: white;
+  border-radius: 0;
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
 }

@@ -1,10 +1,24 @@
 <template>  
-    <div id="landing-games" class="d-flex justify-content-center align-items-center">
+    <div id="landing-page" class="position-relative">
+      <Navbar></Navbar>
+      <NextGame></NextGame>
+      <LandingStore></LandingStore>
+      <JoinUs></JoinUs>
     </div>
 </template>
 
 <script>
+import Navbar from './Navbar.vue';
+import JoinUs from './JoinUs.vue';
+import NextGame from './NextGame.vue'
+import LandingStore from './LandingStore.vue'
 export default {
+    components:{
+      Navbar,
+      JoinUs,
+      NextGame,
+      LandingStore
+    },
     data() {
     return {
       games: [
@@ -59,18 +73,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#landing-games {
-    background-color: goldenrod;
-    height: 60vh;
-    width: 100vw;
-    transition: all .3s ;
-    img{
-      // filter: drop-shadow(5px 5px 15px #12121275);
-      filter: drop-shadow(2px 2px 0 black) 
-          drop-shadow(-2px -2px 0 black);
-    }
-    #game{
-
-    }
+#landing-page{
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: black;
 }
 </style>
