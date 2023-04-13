@@ -8,7 +8,7 @@
             <button class="w-50 ms-auto py-2 .brand-gold-button border">done</button>
         </div>
     </form> 
-    <ForgetPassword v-if="forget" @cancel="forget = false"></ForgetPassword>
+    <ForgetPassword v-if="forget" @cancel="forget = false" @message="$emit('message',$event)"></ForgetPassword>
 </template>
 
 <script>
@@ -16,6 +16,7 @@ import { useAuthStore } from '../stores/authStore';
 import ForgetPassword from './ForgetPassword.vue';
 
 export default {
+    emits: ['message'],
     components:{
         ForgetPassword,
     },
@@ -30,6 +31,7 @@ export default {
     },
     methods:{
         signIn(){
+            useAuthStore().$on('response', response => this.$emit('message',response))
             useAuthStore().login(this.signInData)
             this.message = useAuthStore() 
         }

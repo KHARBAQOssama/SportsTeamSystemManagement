@@ -13,8 +13,10 @@
 
 <script>
 import {useAuthStore} from '../stores/authStore'
+import { eventBus } from '../eventBus';
 
 export default {
+    emits: ['message'],
     data(){
         return {
             forgetData:{
@@ -27,6 +29,10 @@ export default {
     },
     methods:{
         resetPassword(){
+            eventBus.on('response', (response) => {
+                this.$emit('message', response)
+                eventBus.off('response')
+            })
             useAuthStore().resetPassword(this.forgetData);
         }
     }

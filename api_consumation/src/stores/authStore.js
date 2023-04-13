@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import api from '@/api'
+import { eventBus } from '../eventBus';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null
+    user: null,
+    message : null,
   }),
   actions: {
     async login(data) {
@@ -25,11 +27,9 @@ export const useAuthStore = defineStore('auth', {
         });
     },
     async resetPassword(data) {
-        return await api.post('/password/reset-password',data)
+        await api.post('/password/reset-password',data)
         .then((response) => {
-            this.user = response.data
-            console.log(response.status);
-            return response.status
+            eventBus.emit('response', { type: 'success', text: response.data.message })
         }).catch((err) => {
             console.log(err);
         });
@@ -37,7 +37,6 @@ export const useAuthStore = defineStore('auth', {
     async reset(data) {
         return await api.post('/password/reset',data)
         .then((response) => {
-            this.user = response.data
             console.log(response);
             return response.status
         }).catch((err) => {

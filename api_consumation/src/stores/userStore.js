@@ -32,15 +32,23 @@ export const useUserStore = defineStore('user', {
       
     },
 
+    async getUser(user) {
+      const response = await api.get('/user/'+user, )
+      this.user = response.data
+      console.log(this.user)
+    },
     async createUser(user) {
       const response = await api.post('/users', user)
       this.user.push(response.data.user)
     },
 
     async updateUser(user) {
-      const response = await api.put(`/users/${user.id}`, user)
-      const index = this.users.findIndex(u => u.id === user.id)
-      this.users.splice(index, 1, response.data)
+      await api.post(`/user/${user.id}`, user)
+      .then((response)=>{
+        this.message = response.data.success
+        console.log(response)
+      })
+      .catch((error)=>{console.log(error)})
     },
     async updateSelfImage(image) {
       await api.post(`/user/updateImage`, image)

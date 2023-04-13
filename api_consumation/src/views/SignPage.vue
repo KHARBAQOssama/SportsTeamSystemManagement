@@ -1,12 +1,12 @@
 <template>
     <div class="row d-flex justify-content-center flex-wrap w-100 align-items-center sign-container">
-        <SignIn v-if="sign == 'in'"></SignIn>
+        <SignIn v-if="sign == 'in'" @message="$emit('message',$event)"></SignIn>
         <div class="col-md-5 col-lg-5 col-9 my-auto d-flex flex-column align-items-center my-5">
             <h1 class="mb-3 mt-5">WELCOME TO US</h1>
             <button class="w-50 py-2 mb-5 brand-black-button" v-show="sign == 'in'" @click="signUpView" href="">sign up</button>
             <button class="w-50 py-2 mb-5 brand-black-button" v-show="sign == 'up'" @click="signInView">sign in</button>
         </div>
-        <SignUp v-if="sign == 'up'"></SignUp>
+        <SignUp v-if="sign == 'up'" @message="$emit('message')"></SignUp>
     </div>
 </template>
 
@@ -15,6 +15,7 @@ import SignIn from '../components/SignIn.vue';
 import SignUp from '../components/SignUp.vue';
 
 export default {
+    emits: ['message'],
     components:{
         SignIn,
         SignUp
@@ -32,16 +33,6 @@ export default {
         signInView(){
             this.sign = 'in'
         },
-        // signUp(){
-        //     // this.message = 
-        //     useUserStore().signUp(this.signUpData)
-        //     this.message = useUserStore().message 
-        //     console.log(this.message)
-        // },
-        // signIn(){
-        //     useAuthStore().login(this.signInData)
-        //     this.message = useAuthStore() 
-        // }
     }
 }
 </script>

@@ -5,11 +5,16 @@ import LandingPage from './views/LandingPage.vue'
 import AddTournamentForm from './components/AddTournamentForm.vue'
 import Footer from './components/Footer.vue'
 import Profile from './components/Profile.vue'
+import Test from './components/Test.vue'
 
 const routes = [
     {
         path: '/',
         component: LandingPage,
+    },
+    {
+        path: '/test/:id',
+        component: Test,
     },
     {
         path: '/reset-password',

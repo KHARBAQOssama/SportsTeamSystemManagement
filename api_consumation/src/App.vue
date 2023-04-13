@@ -1,12 +1,5 @@
 <template>
-
-  <!-- <MyNavbar></MyNavbar> -->
-<!-- <SignPage></SignPage> -->
-<!-- <AddTournamentForm></AddTournamentForm> -->
-  <!-- <LandingGames></LandingGames> -->
-  <!-- <teams></teams> -->
-  <router-view></router-view>
-  <!-- <Profile></Profile> -->
+  <router-view @message="fillMessage"></router-view>
   <Alert v-if="show" :message="message" @cancel="show = false"></Alert>
 </template>
 
@@ -15,24 +8,25 @@ import api from '@/api';
 import { useUserStore } from './stores/userStore';
 import { useAuthStore } from './stores/authStore';
 
+
 export default {
-        components:{
-        },
-        data() {
-            return {
-              show : false ,
-              message : 'nothing to say'
-            };
-        },
-        
-        mounted(){
-        },
-        
-        computed:{
-        },
-        methods: {
-        }
+    data() {
+        return {
+          show : false ,
+          message : '',
+        };
+    },
+    created(){
+    },
+    computed:{
+    },
+    methods: {
+      fillMessage(message){
+        this.message = message.message
+        this.show = true
+      }
     }
+}
 </script>
 
 <style lang="scss" scoped>
