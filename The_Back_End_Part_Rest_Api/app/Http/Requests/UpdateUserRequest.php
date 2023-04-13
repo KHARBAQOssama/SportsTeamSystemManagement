@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -26,15 +27,24 @@ class UpdateUserRequest extends FormRequest
             'first_name'    => 'required|string',
             'last_name'     => 'required|string',
             'birth_day'     => 'required|date|before:' . date('Y-m-d', strtotime('-15 years')),
-            'password'      => 'required|string|min:8',
-            'image_url'     => 'nullable|url',
         ];
 
-        if(request('email') != JWTAuth::user()->email){
-            $rules['email'] = 'required|email|unique:users,email';
-        }else{
-            $rules['email'] = 'required|email';
+        if(request('user')){
+            $rules['email'] = [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore(request('user'))];
+        }else {
+            $rules['email'] = [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore(JWTAuth::user())];
         }
+
         
         return $rules;
     }

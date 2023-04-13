@@ -40,8 +40,8 @@ class BlogController extends Controller
             $filename = uniqid() . '.jpg';
 
             Storage::put('public/images/' . $filename, $image_data);
-            
-            $credentials['image_url'] = Storage::url('public/images/' . $filename);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
         }
 
         $blog = Blog::create($credentials);
@@ -77,8 +77,8 @@ class BlogController extends Controller
             $filename = uniqid() . '.jpg';
 
             Storage::put('public/images/' . $filename, $image_data);
-            
-            $credentials['image_url'] = Storage::url('public/images/' . $filename);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
         }
 
         $blog->update($credentials);

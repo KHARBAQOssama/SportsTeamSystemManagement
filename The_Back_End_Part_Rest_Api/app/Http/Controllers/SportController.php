@@ -28,10 +28,16 @@ class SportController extends Controller
         $credentials = [
             'name' => $request->input('name')
         ];
-        if($request->file('icon')){
-            $path                       = $request->file('icon')->store('public/icons');
-            $url                        = Storage::url($path);
-            $credentials['icon']        = $url;
+        
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['icon'] = $url;
         }
 
         $sport = Sport::create($credentials);
@@ -47,9 +53,7 @@ class SportController extends Controller
      */
     public function show(Sport $sport)
     {
-        return response()->json([
-            $sport
-        ]);
+        return response()->json($sport);
     }
 
     /**
@@ -60,10 +64,16 @@ class SportController extends Controller
         $credentials = [
             'name' => $request->input('name')
         ];
-        if($request->file('icon')){
-            $path                       = $request->file('icon')->store('public/icons');
-            $url                        = Storage::url($path);
-            $credentials['icon']        = $url;
+        
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['icon'] = $url;
         }
 
         $sport->update($credentials);
@@ -85,15 +95,11 @@ class SportController extends Controller
     }
 
     public function getSportUsers(Sport $sport){
-        return response()->json([
-            $sport->users
-        ]);
+        return response()->json($sport->users);
     }
 
     public function authenticatedSportUsers(){
         $users = JWTAuth::user()->sport->users;
-        return response()->json([
-            $users
-        ]);
+        return response()->json($users);
     }
 }

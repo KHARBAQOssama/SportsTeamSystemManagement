@@ -14,9 +14,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            Team::all()
-        ]);
+        return response()->json(Team::all());
     }
 
 
@@ -47,16 +45,22 @@ class TeamController extends Controller
             'stadium'   => $request->input('stadium'),
         ];
 
-        if($request->file('image')){
-            $path                       = $request->file('image')->store('public/images');
-            $url                        = Storage::url($path);
-            $credentials['image_url']   = $url;
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
         }
 
         $team = Team::create($credentials);
         
         return response()->json([
-            'message' => 'team added successfully'
+            'message' => 'team added successfully',
+            'team' => $team
         ]);
     }
 
@@ -83,12 +87,23 @@ class TeamController extends Controller
             'stadium'   => $request->filled('stadium') ? $request->input('stadium') : $team->stadium,
         ];
 
-        if($request->file('image') && $team->image_url != $request->file('image_url')){
-            $path                       = $request->file('image')->store('public/images');
-            $url                        = Storage::url($path);
-            $credentials['image_url']   = $url;
-        }
+        // if($request->file('image') && $team->image_url != $request->file('image_url')){
+        //     $path                       = $request->file('image')->store('public/images');
+        //     $url                        = Storage::url($path);
+        //     $credentials['image_url']   = $url;
+        // }
 
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
+        }
+        
         $team->update($credentials);
 
         return response()->json([

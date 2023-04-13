@@ -5,12 +5,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SportController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,8 +40,18 @@ Route::group([
 
 });
 
+Route::group([
+    'middleware' => 'api',
+    'prefix' =>'password'
+],function(){
+    Route::post('reset-password',[AuthController::class , 'resetPassword']);
+    Route::post('reset',[AuthController::class , 'reset']);
+});
+
 Route::post('user/{user}/deleteImage',[UserController::class,'deleteUserImage']);
-Route::post('user/{user}/updateImage',[UserController::class,'updateUserImage']);
+Route::put('user/{user}/updateImage',[UserController::class,'updateUserImage']);
+Route::post('user/deleteImage',[UserController::class,'updateUserImage']);
+Route::put('user/updateImage',[UserController::class,'updateSelfImage']);
 Route::post('user/search',[UserController::class,'getBySearch']);
 Route::post('users/add',[UserController::class,'storeByAdmin']);
 Route::apiResource('user',UserController::class);
@@ -58,9 +71,16 @@ Route::apiResource('tournament',TournamentController::class);
 
 Route::get('games-in-sport',[GameController::class,'getGamesInSport']);
 Route::get('games/next',[GameController::class,'nextGame']);
-Route::post('image',[PhotoController::class,'store']);
-Route::get('images',[PhotoController::class,'get']);
+// Route::post('image',[PhotoController::class,'store']);
+// Route::get('images',[PhotoController::class,'get']);
 Route::apiResource('game',GameController::class);
+
+Route::get('blog/{blog}/comments',[BlogController::class,'getBlogComments']);
+Route::apiResource('blog',BlogController::class);
+
+Route::apiResource('comment',CommentController::class);
+
+Route::apiResource('reservation',ReservationController::class);
 
 
 

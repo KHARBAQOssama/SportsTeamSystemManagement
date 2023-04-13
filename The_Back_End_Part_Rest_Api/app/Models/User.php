@@ -14,7 +14,7 @@ class User extends Authenticatable implements JWTSubject
     use HasApiTokens, HasFactory, Notifiable;
 
     public function role(){
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function sport(){
@@ -24,6 +24,26 @@ class User extends Authenticatable implements JWTSubject
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
     /**
      * The attributes that are mass assignable.

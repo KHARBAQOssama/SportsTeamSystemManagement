@@ -28,7 +28,8 @@ class StoreOrUpdateTournamentRequest extends FormRequest
             'draw_points' => 'required|integer',
             'start_date'  => 'required|date|after:today',
             'teams'       => 'required|array',
-            'teams,*'     => 'exists:teams,id',
+            'teams,*'     => 'exists:teams',
+            'date_def'    => 'required|integer'
         ];
     }
 }
