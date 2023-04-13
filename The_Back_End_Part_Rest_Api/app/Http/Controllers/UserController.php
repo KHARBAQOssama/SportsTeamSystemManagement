@@ -18,9 +18,7 @@ class UserController extends Controller
         // $this->middleware('auth:api', ['except' => ['store']]);
         // $this->middleware('permission:add user');
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         return response()->json(User::all());
@@ -47,9 +45,7 @@ class UserController extends Controller
     
         return response()->json($users);
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StoreUserRequest $request)
     {
         $credentials = [
@@ -58,15 +54,21 @@ class UserController extends Controller
             'email'             => $request->input('email'),
             'password'          => Hash::make($request->input('password')),
             'birth_day'         => $request->input('birth_day'),
-            'image_url'   => '/storage/images/userDefaultImage.png'
+            'image_url'   => 'http://localhost:8000/storage/images/userDefaultImage.png'
         ];
 
-        if($request->file('image')){
-            $path                       = $request->file('image')->store('public/images');
-            $url                        = Storage::url($path);
-            $credentials['image_url']   = $url;
+
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
         }else{
-            $credentials['image_url']   = 'http://localhost/storage/images/userDefaultImage.png';
+            $credentials['image_url']   = 'http://localhost:8000/storage/images/userDefaultImage.png';
         }
 
         $user = User::create($credentials);
@@ -102,12 +104,17 @@ class UserController extends Controller
             $credentials['role_id']         = $request->input('role_id');
         }
 
-        if($request->file('image')){
-            $path                       = $request->file('image')->store('public/images');
-            $url                        = Storage::url($path);
-            $credentials['image_url']   = $url;
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
         }else{
-            $credentials['image_url']   = '/storage/images/userDefaultImage.png';
+            $credentials['image_url']   = 'http://localhost:8000/storage/images/userDefaultImage.png';
         }
 
         $user = User::create($credentials);
@@ -123,17 +130,16 @@ class UserController extends Controller
             $user,
         ],201);
     }
-    /**
-     * Display the specified resource.
-     */
+
     public function show(User $user)
     {
-        return response()->json([$user]);
+        $user->role = $user->role;
+        $user->sport = $user->sport;
+        $user->permissions = $user->permissions;
+        return response()->json($user);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateUserRequest $request, User $user)
     {
         $credentials = [
@@ -144,11 +150,23 @@ class UserController extends Controller
             'birth_day'         => $request->input('birth_day'),
         ];
 
-        if($request->file('image')){
-            $path                       = $request->file('image')->store('public/images');
-            $url                        = Storage::url($path);
-            $credentials['image_url']   = $url;
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
         }
+
+        $user->update($credentials);
+
+        return response()->json([
+            'success' => 'the user profile has been updated successfully'
+        ]);
     }
 
     public function updateSelf(UpdateUserRequest $request){
@@ -159,9 +177,14 @@ class UserController extends Controller
             'birth_day'         => $request->input('birth_day'),
         ];
 
-        if($request->file('image')){
-            $path = $request->file('image')->store('public/images');
-            $url = Storage::url($path);
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
             $credentials['image_url'] = $url;
         }
 
@@ -180,9 +203,17 @@ class UserController extends Controller
         ]);
 
         $credentials = [];
-        $path = $request->file('image')->store('public/images');
-        $url = Storage::url($path);
-        $credentials['image_url'] = $url;
+
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
+        }
 
         $user->update($credentials);
 
@@ -192,7 +223,7 @@ class UserController extends Controller
 
     }
 
-    public function updateSelfImage(Request $request){
+    public function updateSelfImage(Request $request){     
         $request->validate([
             'image' => 'required',
         ]);
@@ -201,9 +232,17 @@ class UserController extends Controller
 
         $credentials = [];
 
-        $path = $request->file('image')->store('public/images');
-        $url = Storage::url($path);
-        $credentials['image_url'] = $url;
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
+        }
 
         $user->update($credentials);
 
@@ -214,7 +253,7 @@ class UserController extends Controller
 
     public function deleteUserImage(User $user){
 
-        $credentials = ['image_url' => '/storage/images/userDefaultImage.png'];
+        $credentials = ['image_url' => 'http://localhost:8000/storage/images/userDefaultImage.png'];
 
         $user->update($credentials);
 
@@ -226,7 +265,7 @@ class UserController extends Controller
     public function deleteSelfImage(){
         $user = JWTAuth::user();
 
-        $credentials = ['image_url' => '/storage/images/userDefaultImage.png'];
+        $credentials = ['image_url' => 'http://localhost:8000/storage/images/userDefaultImage.png'];
 
         $user->update($credentials);
 
@@ -234,9 +273,7 @@ class UserController extends Controller
             'message' => 'image deleted successfully',
         ]);
     }
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(User $user)
     {
         $user->delete();
