@@ -65,14 +65,19 @@ class GameController extends Controller
         if($request->input('new_away_team_name')){
             $away = $this->storeGameTeam($request,'new_away_team_');
         }
+        $fans = 1;
+
+        if(!$request->input('fans')){
+            $fans = 0;
+        }
 
         $seats_number = fake()->numberBetween(0,80000);
         $credentials = [
             'home' => $home,
             'away' => $away,
-            'fans' => $request->input('fans') ? $request->input('fans') : null,
-            'seats_number' => $request->input('fans') ? $seats_number : null,
-            'seats_available' => $request->input('fans') ? $seats_number : null,
+            'fans' => $fans,
+            'seats_number' => $fans ? $seats_number : null,
+            'seats_available' => $fans ? $seats_number : null,
             'date' => $request->input('date'),
             'game_place' => Team::find($home)->stadium,
             'start_time' => $request->input('start_time'),
@@ -81,6 +86,7 @@ class GameController extends Controller
             'referee2' =>$request->input('referee2') ? $request->input('referee2') : null,
             'referee3' =>$request->input('referee3') ? $request->input('referee3') : null,
             'sport_id' => JWTAuth::user()->sport->id,
+            // 'sport_id' => 1,
             'ticket_price' => $request->input('fans') ? $request->input('ticket_price') : null,
         ];
 
