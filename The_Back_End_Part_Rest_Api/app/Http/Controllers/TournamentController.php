@@ -23,39 +23,13 @@ class TournamentController extends Controller
     }
 
 
-    private function storeTournamentTeams($request){
-        $teams = $request->input('teams');
-
-        if($request->input('new_teams')){
-            for($i=0;$i<count($request->input('new_teams'));$i++){
-                $path                       = $request->file('new_teams_image')[$i]->store('public/images');
-                $url                        = Storage::url($path);
-
-                $credentials = [
-                    'name'      => $request->input('new_teams_name')[$i],
-                    'slag'      => strtoupper($request->input('new_teams_slag')[$i]),
-                    'country'   => $request->input('new_teams_country')[$i],
-                    'city'      => $request->input('new_teams_city')[$i],
-                    'stadium'   => $request->input('new_teams_stadium')[$i],
-                    'image_url'   => $url,
-                ];
-        
-                $team = Team::create($credentials)->id;
-
-                $teams[] = $team;
-            }
-        }
-
-        return $teams;
-    }
-
     private function generateGames($teams){
         $rounds = [];
         $games = [];
         for($i = 0;$i <count($teams)-1;$i++){
             $rounds[$i+1] = [];
             for($j = $i+1;$j <count($teams);$j++){
-                $games[] = [$teams[$i],$teams[$j]];
+                $games[] = [$teams[$i]['id'],$teams[$j]['id']];
             }  
         }
 
@@ -95,6 +69,7 @@ class TournamentController extends Controller
             'referee2' => fake()->name(),
             'referee3' => fake()->name(),
             'tournament_id' => $tournament,
+            // 'sport_id' => 1,
             'sport_id' => JWTAuth::user()->sport->id,
             'ticket_price' => $fans ? fake()->numberBetween(0,120) : null,
         ];
@@ -108,124 +83,94 @@ class TournamentController extends Controller
 
         return $game;
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+
+
     public function store(StoreOrUpdateTournamentRequest $request)
     {
-        // $credentials = [
-        //     'name' => $request->input('name'),
-        //     'sport_id' => JWTAuth::user()->sport->id,
-        //     'win_points' => $request->input('win_points'),
-        //     'loss_points' => $request->input('loss_points'),
-        //     'draw_points' => $request->input('draw_points'),
-        //     'start_date' => $request->input('start_date'),
-        //     'created_by' => JWTAuth::user()->id,
-        //     'updated_by' => JWTAuth::user()->id,
-        // ];
-
-        // if($request->file('image')){
-        //     $path                       = $request->file('image')->store('public/images');
-        //     $url                        = Storage::url($path);
-        //     $credentials['image_url']   = $url;
-        // }
-        
-        // $tournament_id = Tournament::create($credentials)->id;
-
-        // $counter = 0;
-
-        // $numbers = [4,8,16,32,64];
-        // if($request->input('teams')){
-        //     $counter+=count($request->input('teams'));
-        // }
-
-        // if($request->input('new_teams')){
-
-        //     $length = count($request->input('new_teams'));
-        //     $counter+= $length;
-            
-        //     $request->validate([
-        //         'new_teams_name'        => 'required|array|size:'.$length,
-        //         'new_teams_name,*'      => 'string',
-        //         'new_teams_slag'        => 'required|array|size:'.$length,
-        //         'new_teams_slag,*'      => 'string',
-        //         'new_teams_country'     => 'required|array|size:'.$length,
-        //         'new_teams_country,*'   => 'string',
-        //         'new_teams_city'        => 'required|array|size:'.$length,
-        //         'new_teams_city,*'      => 'string',
-        //     ]);
-        // }
-
-        // if(!in_array($counter,$numbers)){
-        //     return response()->json([
-        //         'error' => 'teams number should be 4, 8, 16, 32, or 64',
-        //     ]);
-        // }
-
-        // $teams = $this->storeTournamentTeams($request);
-
-        // foreach ($teams as $team) {
-        //     DB::table('standings')->insert([
-        //         'tournament_id' => $tournament_id,
-        //         'team_id' => $team,
-        //     ]);
-        // }
-
-        // $rounds = $this->generateGames(
-        //             $teams,
-        //         );
-
-        // $def = $request->input('date_def');
-        // $start_date = Carbon::parse($request->input('start_date'));
-        
-        // $home_date = $start_date;
-        
-        // foreach ($rounds as $round => $games) {
-
-            
-        //     $away_date = $home_date->copy()->addDays($def*count($rounds));
-
-        //     foreach ($games as $game) {
-        //         $seats_number = fake()->numberBetween(0,80000);
-        //         $home_game = $this->storeGame(
-        //             $game[0],
-        //             $game[1],
-        //             $round,
-        //             $home_date,
-        //             $tournament_id,
-        //             $seats_number
-        //         );
-
-        //         $away_game = $this->storeGame(
-        //             $game[1],
-        //             $game[0],
-        //             $round+count($rounds),
-        //             $away_date,
-        //             $tournament_id,
-        //             $seats_number
-        //         );
-        //     }
-        //     $home_date = $start_date->addDays($def);
-        // }
-
-        // $tournament = Tournament::find($tournament_id);
-
-        // return response()->json([
-        //     $tournament,
-        // ]);
         $credentials = [
             'name' => $request->input('name'),
+            'sport_id' => JWTAuth::user()->sport->id,
+            // 'sport_id' => 1,
             'win_points' => $request->input('win_points'),
-            'draw_points' => $request->input('draw_points'),
             'loss_points' => $request->input('loss_points'),
+            'draw_points' => $request->input('draw_points'),
             'start_date' => $request->input('start_date'),
-            'randomMatches' =>  $request->input('randomMatches'),
-            'teams' =>  $request->input('teams'),
-            'image' =>  $request->file('image'),
-            'new_teams' => $request->input('new_teams'),
+            'created_by' => JWTAuth::user()->id,
+            // 'created_by' => 1,
+            'updated_by' => JWTAuth::user()->id,
+            // 'updated_by' => 1,
         ];
+
+        if ($request->input('image')) {
+            $base64_string = $request->input('image');
+            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+    
+            $filename = uniqid() . '.jpg';
+
+            Storage::put('public/images/' . $filename, $image_data);
+            $url = asset('storage/images/'.$filename);
+            $credentials['image_url'] = $url;
+        }
+
+        $tournament_id = Tournament::create($credentials)->id;
+
+        $numbers = [4,8,16,32,64];
+        $teams = $request->input('teams');
+
+        if(!in_array(count($teams),$numbers)){
+            return response()->json([
+                'error' => 'teams number should be 4, 8, 16, 32, or 64',
+            ]);
+        }
+
+        foreach ($teams as $team) {
+            DB::table('standings')->insert([
+                'tournament_id' => $tournament_id,
+                'team_id' => $team['id'],
+            ]);
+        }
+
+        $rounds = $this->generateGames(
+                    $teams,
+                );
+
+        $def = $request->input('date_def');
+        $start_date = Carbon::parse($request->input('start_date'));
+        
+        $home_date = $start_date;
+        
+        foreach ($rounds as $round => $games) {
+
+            
+            $away_date = $home_date->copy()->addDays($def*count($rounds));
+
+            foreach ($games as $game) {
+                $seats_number = fake()->numberBetween(0,80000);
+                $home_game = $this->storeGame(
+                    $game[0],
+                    $game[1],
+                    $round,
+                    $home_date,
+                    $tournament_id,
+                    $seats_number
+                );
+
+                $away_game = $this->storeGame(
+                    $game[1],
+                    $game[0],
+                    $round+count($rounds),
+                    $away_date,
+                    $tournament_id,
+                    $seats_number
+                );
+            }
+            $home_date = $start_date->addDays($def);
+        }
+
+        $tournament = Tournament::find($tournament_id);
+
         return response()->json([
-            $credentials,
+            $tournament,
         ]);
     }
 
@@ -335,14 +280,6 @@ class TournamentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(StoreOrUpdateTournamentRequest $request, Tournament $tournament)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Tournament $tournament)
@@ -354,6 +291,5 @@ class TournamentController extends Controller
         $tournament->delete();
 
         return response()->json(['message' => 'tournament has been deleted successfully']);
-
     }
 }
