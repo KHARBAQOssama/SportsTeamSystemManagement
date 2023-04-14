@@ -19,9 +19,51 @@ class UserController extends Controller
         // $this->middleware('permission:add user');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(User::all());
+        $users = User::with('role', 'permissions', 'sport');
+
+        if ($request->has('role')) {
+            $role = $request->input('role');
+            $usersRole = User::where('role_id', $role);
+            $users->mergeConstraintsFrom($usersRole);
+        }
+
+        if ($request->has('sport')) {
+            $sport = $request->input('sport');
+            $usersSport = User::where('sport_id', $sport);
+            $users->mergeConstraintsFrom($usersSport);
+        }
+
+        if ($request->has('by_search')) {
+            $search = $request->input('by_search');
+            $usersSearch = User::where('first_name', 'like', "%$search%");
+            $users->mergeConstraintsFrom($usersSearch);
+        }
+
+        $users = $users->get();
+
+        return response()->json($users);
+        // $users = User::with('role','permissions','sport')->query();
+        
+        // if ($request->has('role')) {
+        //     $role = $request->input('role');
+        //     $users->where('role_id', $role);
+        // }
+
+        // if ($request->has('sport')) {
+        //     $role = $request->input('sport');
+        //     $users->where('sport_id', $role);
+        // }
+        
+        // if ($request->has('by_search')) {
+        //     $search = $request->input('by_search');
+        //     $users->where('name', 'like', "%$search%");
+        // }
+        
+        // $users = $users->get();
+
+        // return response()->json($users);
     }
 
     public function getBySearch(Request $request){
@@ -54,7 +96,6 @@ class UserController extends Controller
             'email'             => $request->input('email'),
             'password'          => Hash::make($request->input('password')),
             'birth_day'         => $request->input('birth_day'),
-            'image_url'   => 'http://localhost:8000/storage/images/userDefaultImage.png'
         ];
 
 
@@ -67,8 +108,6 @@ class UserController extends Controller
             Storage::put('public/images/' . $filename, $image_data);
             $url = asset('storage/images/'.$filename);
             $credentials['image_url'] = $url;
-        }else{
-            $credentials['image_url']   = 'http://localhost:8000/storage/images/userDefaultImage.png';
         }
 
         $user = User::create($credentials);
@@ -113,8 +152,6 @@ class UserController extends Controller
             Storage::put('public/images/' . $filename, $image_data);
             $url = asset('storage/images/'.$filename);
             $credentials['image_url'] = $url;
-        }else{
-            $credentials['image_url']   = 'http://localhost:8000/storage/images/userDefaultImage.png';
         }
 
         $user = User::create($credentials);
