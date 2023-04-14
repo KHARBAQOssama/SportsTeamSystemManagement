@@ -31,7 +31,6 @@ export default {
     },
     methods:{
         signIn(){
-            useAuthStore().$on('response', response => this.$emit('message',response))
             useAuthStore().login(this.signInData)
             this.message = useAuthStore() 
         }

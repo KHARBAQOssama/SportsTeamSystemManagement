@@ -6,11 +6,20 @@ import AddTournamentForm from './components/AddTournamentForm.vue'
 import Footer from './components/Footer.vue'
 import Profile from './components/Profile.vue'
 import Test from './components/Test.vue'
+import Users from './components/Users.vue'
 
 const routes = [
     {
         path: '/',
         component: LandingPage,
+    },
+    {
+        path: '/profile',
+        component: Profile,
+    },
+    {
+        path: '/users',
+        component: Users,
     },
     {
         path: '/test/:id',

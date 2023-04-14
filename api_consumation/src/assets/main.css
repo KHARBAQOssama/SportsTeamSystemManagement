@@ -165,15 +165,15 @@ body::-webkit-scrollbar-thumb,#app::-webkit-scrollbar-thumb {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 4px ;
-  height: 4px ;
+  width: 0px ;
+  height: 0px ;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
   background: goldenrod;
-  width: 7px;
-  height: 7px;
+  width: 0px;
+  height: 0px;
 }
 
 /* Handle */

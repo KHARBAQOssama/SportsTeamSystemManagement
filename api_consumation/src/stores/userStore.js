@@ -3,14 +3,17 @@ import api from '@/api'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    users: [],
-    currentUser: null,
-    user: null,
-    message : null
+    users : [],
+    message: null,
+    user:null,
+    currentUser:null
   }),
+  getters:{
+
+  },
   actions: {
-    fetchUsers() {
-      api.get('/user')
+    fetchUsers(search) {
+      api.get('/user',search)
             .then((result) => {
               console.log(result.data)
                 this.users = result.data
@@ -28,8 +31,6 @@ export const useUserStore = defineStore('user', {
       .catch((error)=>{
         console.log(error.data);
       })
-      
-      
     },
 
     async getUser(user) {
@@ -37,6 +38,7 @@ export const useUserStore = defineStore('user', {
       this.user = response.data
       console.log(this.user)
     },
+
     async createUser(user) {
       const response = await api.post('/users', user)
       this.user.push(response.data.user)
@@ -50,6 +52,7 @@ export const useUserStore = defineStore('user', {
       })
       .catch((error)=>{console.log(error)})
     },
+
     async updateSelfImage(image) {
       await api.post(`/user/updateImage`, image)
       .then((response)=>{
