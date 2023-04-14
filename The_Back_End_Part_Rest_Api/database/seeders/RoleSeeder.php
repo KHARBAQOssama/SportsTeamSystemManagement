@@ -16,15 +16,19 @@ class RoleSeeder extends Seeder
         $roles = [
             [
                 'name' => 'Fan',
+                'icon' => 'http://localhost:8000/storage/images/suporter.png'
             ],
             [
                 'name' => 'Team Member',
+                'icon' => 'http://localhost:8000/storage/images/team-member.png'
             ],
             [
                 'name' => 'Sub-admin',
+                'icon' => 'http://localhost:8000/storage/images/admin.png',
             ],
             [
                 'name' => 'Admin',
+                'icon' => 'http://localhost:8000/storage/images/super-admin.png',
             ],
         ];
 

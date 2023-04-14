@@ -71,8 +71,6 @@ Route::apiResource('tournament',TournamentController::class);
 
 Route::get('games-in-sport',[GameController::class,'getGamesInSport']);
 Route::get('games/next',[GameController::class,'nextGame']);
-// Route::post('image',[PhotoController::class,'store']);
-// Route::get('images',[PhotoController::class,'get']);
 Route::apiResource('game',GameController::class);
 
 Route::get('blog/{blog}/comments',[BlogController::class,'getBlogComments']);

@@ -16,16 +16,18 @@ class SportSeeder extends Seeder
         $sports = [
             [
                 'name' => 'Soccer',
+                'icon' => 'http://localhost:8000/storage/images/soccer.png',
             ],
             [
                 'name' => 'Basketball',
+                'icon' => 'http://localhost:8000/storage/images/basketball.png',
             ],
             [
                 'name' => 'Handball',
+                'icon' => 'http://localhost:8000/storage/images/handball.png',
             ],
         ];
 
-        // Insert the sports into the database
         DB::table('sports')->insert($sports);
 
     }

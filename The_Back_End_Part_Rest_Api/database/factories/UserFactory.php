@@ -18,9 +18,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'first_name' => fake()->name(),
-            'last_name' => fake()->name(),
-            'birth_day' => fake()->date(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'birth_day' => fake()->dateTimeBetween('-15 years','now')->format('Y-m-d'),
             'image_url' => 'http://localhost:8000/storage/images/userDefaultImage.png',
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
