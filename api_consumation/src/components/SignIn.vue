@@ -14,6 +14,9 @@
 <script>
 import { useAuthStore } from '../stores/authStore';
 import ForgetPassword from './ForgetPassword.vue';
+// import { useRouter } from 'vue-router';
+
+import router from '../routes';
 
 export default {
     emits: ['message'],
@@ -30,9 +33,9 @@ export default {
         }
     },
     methods:{
-        signIn(){
-            useAuthStore().login(this.signInData)
-            this.message = useAuthStore() 
+        async signIn(){
+            await useAuthStore().login(this.signInData)
+            if(useAuthStore().user) router.push('/');
         }
     }
 }

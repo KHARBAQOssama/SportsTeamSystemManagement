@@ -39,7 +39,7 @@ export default {
 
 <style scoped> 
 .alert{
-    background: rgba(218, 165, 32, 0.258)   ;
+    background: rgb(255, 225, 148)   ;
     min-width: 420px;
     position: absolute;
     padding: 5px 0;

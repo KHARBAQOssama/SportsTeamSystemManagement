@@ -2,15 +2,16 @@ import { defineStore } from 'pinia'
 import api from '@/api'
 import { toRaw } from 'vue';
 
-export const useRoleStore = defineStore('role', {
+export const useSportStore = defineStore('sport', {
     state: () => ({
-        roles: [],
+        sports: [],
     }),
     actions: {
-        async fetchRoles() {
-            await api.get('/role')
+        fetchSports() {
+            api.get('/sport')
             .then((response) => {
-                this.roles = response.data
+                console.log
+                this.sports = response.data
             }).catch((err) => {
                 console.log(err);
             });

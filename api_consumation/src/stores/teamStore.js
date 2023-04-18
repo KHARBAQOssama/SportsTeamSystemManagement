@@ -8,8 +8,8 @@ export const useTeamStore = defineStore('team', {
         teamAdded: {}
     }),
     actions: {
-        async fetchTeams() {
-            await api.get('/team')
+        fetchTeams() {
+            api.get('/team')
             .then((response) => {
                 this.teams = toRaw(response.data) ;
                 // console.log(response.data) ;

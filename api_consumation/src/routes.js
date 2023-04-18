@@ -2,10 +2,12 @@ import { createRouter,createWebHistory } from 'vue-router';
 import ResetPassword from './views/ResetPassword.vue'
 import SignPage from './views/SignPage.vue'
 import LandingPage from './views/LandingPage.vue'
+import Dashboard from './views/Dashboard.vue'
 import AddTournamentForm from './components/AddTournamentForm.vue'
 import Footer from './components/Footer.vue'
 import Profile from './components/Profile.vue'
 import Test from './components/Test.vue'
+import DashboardContent from './components/DashboardContent.vue'
 import Users from './components/Users.vue'
 
 const routes = [
@@ -16,6 +18,30 @@ const routes = [
     {
         path: '/profile',
         component: Profile,
+    },
+    {
+        path: '/dashboard',
+        component: Dashboard,
+        children : [
+            {
+                path: '',
+                component: DashboardContent,
+            },
+            {
+                path: 'profile',
+                component: Profile,
+                name: 'ownProfile'
+            },
+            {
+                path: 'users',
+                component: Users,
+                name: 'users'
+            },
+        ]
+    },
+    {
+        path: '/adding',
+        component: AddTournamentForm,
     },
     {
         path: '/users',

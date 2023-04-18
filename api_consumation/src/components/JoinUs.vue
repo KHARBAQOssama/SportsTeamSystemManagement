@@ -1,6 +1,6 @@
 <template>
     <button class="text-center px-2 position-fixed end-0 me-5 mb-5 bottom-0 z-3">
-        <a href="http://localhost:5173/authentication" class="fs-5">Join Us</a>
+        <router-link to="/sign" class="fs-5">Join Us</router-link>
     </button>
 </template>
 <script>

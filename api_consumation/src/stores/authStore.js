@@ -7,29 +7,55 @@ export const useAuthStore = defineStore('auth', {
     user: null,
     message : null,
   }),
+  getters:{
+
+  },
   actions: {
+    // async login(data) {
+    //     await api.post('/auth/login',data)
+    //     .then((response) => {
+    //         console.log(response.data)
+    //         const { access_token } = response.data
+    //         localStorage.setItem('token', access_token)
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     });
+    //     this.me()
+    // },
     async login(data) {
-        await api.post('/auth/login',data)
-        .then((response) => {
-            console.log(response.data)
-            const { access_token } = response.data
-            localStorage.setItem('token', access_token)
-        }).catch((err) => {
-            console.log(err);
-        });
+        const response = await this.handleErrors(api.post('/auth/login', data));
+        if (response) {
+          console.log(response.data);
+          const { access_token } = response.data;
+          localStorage.setItem('token', access_token);
+          await this.me();
+        }
     },
-    async me(data) {
-        await api.post('/auth/me',data)
+    async me() {
+        await api.post('/auth/me')
         .then((response) => {
             this.user = response.data
+            console.log(response);
         }).catch((err) => {
+            console.log('from me');
             console.log(err);
+            this.user = null;
         });
+    },
+    async refresh() {
+        const response = await this.handleErrors(api.post('/auth/refresh'));
+        if (response) {
+          console.log(response.data);
+          const { access_token } = response.data;
+          localStorage.setItem('token', access_token);
+          await this.me();
+        }
     },
     async resetPassword(data) {
         await api.post('/password/reset-password',data)
         .then((response) => {
-            eventBus.emit('response', { type: 'success', text: response.data.message })
+            this.message = response.data.message 
+            console.log(response)
         }).catch((err) => {
             console.log(err);
         });
@@ -43,5 +69,14 @@ export const useAuthStore = defineStore('auth', {
             console.log(err);
         });
     },
+    async handleErrors(promise) {
+        try {
+          const response = await promise;
+          return response;
+        } catch (err) {
+          console.log(err);
+          this.message = err.response?.data?.message || 'Something went wrong';
+        }
+    }
   }
 })

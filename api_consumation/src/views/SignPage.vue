@@ -14,6 +14,10 @@
 import SignIn from '../components/SignIn.vue';
 import SignUp from '../components/SignUp.vue';
 
+import router from '../routes';
+
+import { useAuthStore } from '../stores/authStore';
+
 export default {
     emits: ['message'],
     components:{
@@ -25,6 +29,13 @@ export default {
             sign : 'in',
             message: null
         }
+    },
+    computed:{
+    },
+    created(){
+        // console.log('hello')
+        // await useAuthStore().me();
+        if(useAuthStore().user) router.push('/');
     },
     methods:{
         signUpView(){
