@@ -21,70 +21,29 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::with('role', 'permissions', 'sport');
-
+        $query = User::query();
+    
         if ($request->has('role')) {
             $role = $request->input('role');
-            $usersRole = User::where('role_id', $role);
-            $users->mergeConstraintsFrom($usersRole);
+            $query->where('role_id', $role);
         }
 
         if ($request->has('sport')) {
             $sport = $request->input('sport');
-            $usersSport = User::where('sport_id', $sport);
-            $users->mergeConstraintsFrom($usersSport);
+            $query->where('sport_id', $sport);
         }
 
         if ($request->has('by_search')) {
             $search = $request->input('by_search');
-            $usersSearch = User::where('first_name', 'like', "%$search%");
-            $users->mergeConstraintsFrom($usersSearch);
+            $query->where(function ($query) use ($search) {
+                $query->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
         }
 
-        $users = $users->get();
+        $users = $query->with(['role', 'permissions', 'sport'])->get();
 
-        return response()->json($users);
-        // $users = User::with('role','permissions','sport')->query();
-        
-        // if ($request->has('role')) {
-        //     $role = $request->input('role');
-        //     $users->where('role_id', $role);
-        // }
-
-        // if ($request->has('sport')) {
-        //     $role = $request->input('sport');
-        //     $users->where('sport_id', $role);
-        // }
-        
-        // if ($request->has('by_search')) {
-        //     $search = $request->input('by_search');
-        //     $users->where('name', 'like', "%$search%");
-        // }
-        
-        // $users = $users->get();
-
-        // return response()->json($users);
-    }
-
-    public function getBySearch(Request $request){
-        $searchInput = $request->input('search');
-        $sportFilter = $request->input('sport_filter');
-        $roleFilter = $request->input('role_filter');
-        
-        $users = User::query()
-            ->when($searchInput, function ($query, $searchInput) {
-                return $query->where('first_name', 'like', $searchInput.'%')
-                             ->orWhere('last_name', 'like', $searchInput.'%')
-                             ->orWhere('email', 'like', $searchInput.'%');
-            })
-            ->when($sportFilter, function ($query, $sportFilter) {
-                return $query->where('sport_id', '=', $sportFilter);
-            })
-            ->when($roleFilter, function ($query, $roleFilter) {
-                return $query->where('role_id', '=', $roleFilter);
-            })
-            ->get();
-    
         return response()->json($users);
     }
 
@@ -138,7 +97,10 @@ class UserController extends Controller
             'birth_day'         => $request->input('birth_day'),
         ];
 
-        if($request->input('sport_id')){
+        if($request->input('role_id') == 1 || $request->input('role_id') == 4){
+            $credentials['sport_id']        = null;
+            $credentials['role_id']         = $request->input('role_id');
+        }else{
             $credentials['sport_id']        = $request->input('sport_id');
             $credentials['role_id']         = $request->input('role_id');
         }
@@ -163,7 +125,7 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'success' => 'Account has been created successfully',
+            'success' => 'Account created successfully',
             $user,
         ],201);
     }
@@ -183,9 +145,16 @@ class UserController extends Controller
             'first_name'        => $request->input('first_name'),
             'last_name'         => $request->input('last_name'),
             'email'             => $request->input('email'),
-            'password'          => Hash::make($request->input('password')),
             'birth_day'         => $request->input('birth_day'),
         ];
+
+        if($request->input('role_id') == 1 || $request->input('role_id') == 4){
+            $credentials['sport_id']        = null;
+            $credentials['role_id']         = $request->input('role_id');
+        }else{
+            $credentials['sport_id']        = $request->input('sport_id');
+            $credentials['role_id']         = $request->input('role_id');
+        }
 
         if ($request->input('image')) {
             $base64_string = $request->input('image');
@@ -202,7 +171,7 @@ class UserController extends Controller
         $user->update($credentials);
 
         return response()->json([
-            'success' => 'the user profile has been updated successfully'
+            'message' => 'Account updated successfully'
         ]);
     }
 
@@ -214,50 +183,13 @@ class UserController extends Controller
             'birth_day'         => $request->input('birth_day'),
         ];
 
-        if ($request->input('image')) {
-            $base64_string = $request->input('image');
-            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
-    
-            $filename = uniqid() . '.jpg';
-
-            Storage::put('public/images/' . $filename, $image_data);
-            $url = asset('storage/images/'.$filename);
-            $credentials['image_url'] = $url;
-        }
-
         $user = JWTAuth::user();
         $user->update($credentials);
 
         return response()->json([
-            'message' => 'Your account has been updated successfully',
-            $user,
+            'message' => 'Your account updated successfully',
+            'user' => $user,
         ]);
-    }
-
-    public function updateUserImage(Request $request,User $user){
-        $request->validate([
-            'image' => 'required',
-        ]);
-
-        $credentials = [];
-
-        if ($request->input('image')) {
-            $base64_string = $request->input('image');
-            $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
-    
-            $filename = uniqid() . '.jpg';
-
-            Storage::put('public/images/' . $filename, $image_data);
-            $url = asset('storage/images/'.$filename);
-            $credentials['image_url'] = $url;
-        }
-
-        $user->update($credentials);
-
-        return response()->json([
-            'message' => 'image updated successfully',
-        ]);
-
     }
 
     public function updateSelfImage(Request $request){     
@@ -285,29 +217,6 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'image updated successfully',
-        ]);
-    }
-
-    public function deleteUserImage(User $user){
-
-        $credentials = ['image_url' => 'http://localhost:8000/storage/images/userDefaultImage.png'];
-
-        $user->update($credentials);
-
-        return response()->json([
-            'message' => 'image deleted successfully',
-        ]);
-    }
-
-    public function deleteSelfImage(){
-        $user = JWTAuth::user();
-
-        $credentials = ['image_url' => 'http://localhost:8000/storage/images/userDefaultImage.png'];
-
-        $user->update($credentials);
-
-        return response()->json([
-            'message' => 'image deleted successfully',
         ]);
     }
 

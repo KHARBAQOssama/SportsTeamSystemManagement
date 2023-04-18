@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             SportSeeder::class,
             TeamSeeder::class,
             OurTeamSeeder::class,
+            AdminSeeder::class
         ]);
 
         \App\Models\User::factory(10)->create();

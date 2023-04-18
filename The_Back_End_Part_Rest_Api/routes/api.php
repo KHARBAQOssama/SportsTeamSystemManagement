@@ -12,8 +12,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +54,7 @@ Route::post('user/{user}/deleteImage',[UserController::class,'deleteUserImage'])
 Route::put('user/{user}/updateImage',[UserController::class,'updateUserImage']);
 Route::post('user/deleteImage',[UserController::class,'updateUserImage']);
 Route::put('user/updateImage',[UserController::class,'updateSelfImage']);
+Route::put('user/update',[UserController::class,'updateSelf']);
 Route::post('user/search',[UserController::class,'getBySearch']);
 Route::post('users/add',[UserController::class,'storeByAdmin']);
 Route::apiResource('user',UserController::class);
@@ -80,5 +83,6 @@ Route::apiResource('comment',CommentController::class);
 
 Route::apiResource('reservation',ReservationController::class);
 
+Route::get('role',[RoleController::class,'index']);
 
 

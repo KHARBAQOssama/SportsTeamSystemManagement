@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -33,7 +34,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Incorrect email or password'], 401);
+            return response()->json(['message' => 'Incorrect email or password'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -46,7 +47,8 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = User::with('role','sport','permissions')->find(JWTAuth::user()->id);
+        return response()->json($user);
     }
 
     /**
