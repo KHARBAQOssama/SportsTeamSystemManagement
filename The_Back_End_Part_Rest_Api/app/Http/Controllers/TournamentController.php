@@ -17,9 +17,21 @@ class TournamentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return response()->json([Tournament::all()]);
+    public function index(Request $request)
+    {   
+        $query = Tournament::query();
+        if ($request->has('sport')) {
+            $sport = $request->input('sport');
+            $query->where('sport_id', $sport);
+        }
+
+        if ($request->has('by_search')) {
+            $search = $request->input('by_search');
+            $query->where('name','LIKE','%'.$search.'%');
+        }
+
+        $tournaments = $query->with(['sport','games'])->get();
+        return response()->json($tournaments);
     }
 
 
@@ -270,6 +282,27 @@ class TournamentController extends Controller
         
         return response()->json($standing);
         
+    }
+
+    public function update(Request $request,Tournament $tournament){
+        return response()->json($request);
+        $credentials = [
+            'name'=> $request->input('name'),
+        ];
+        if($request->input('image') != $tournament->image_url){
+                $base64_string = $request->input('image');
+                $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
+                $filename = uniqid() . '.jpg';
+                Storage::put('public/images/' . $filename, $image_data);
+                $url = asset('storage/images/'.$filename);
+                $credentials['image_url'] = $url;
+        }
+
+        $tournament->update($credentials);
+
+        return response()->json([
+            'message' => 'tournament updated',
+        ]);
     }
     /**
      * Display the specified resource.

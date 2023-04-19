@@ -20,7 +20,7 @@ class UserFactory extends Factory
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
-            'birth_day' => fake()->dateTimeBetween('-15 years','now')->format('Y-m-d'),
+            'birth_day' => fake()->dateTimeBetween('-200 years','-15 years')->format('Y-m-d'),
             'image_url' => 'http://localhost:8000/storage/images/userDefaultImage.png',
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

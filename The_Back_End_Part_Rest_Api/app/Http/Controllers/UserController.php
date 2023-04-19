@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
+use App\Events\UserCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -77,6 +79,8 @@ class UserController extends Controller
             ]);
         }
 
+        event(new UserCreated($user));
+
         return response()->json([
             'message' => 'Account has been created successfully',
             'user' => $user,
@@ -97,7 +101,10 @@ class UserController extends Controller
             'birth_day'         => $request->input('birth_day'),
         ];
 
-        if($request->input('role_id') == 1 || $request->input('role_id') == 4){
+        $admin = Role::where('name','admin')->first()->id;
+        $fan = Role::where('name','fan')->first()->id;
+
+        if($request->input('role_id') ==  $admin || $request->input('role_id') == $fan){
             $credentials['sport_id']        = null;
             $credentials['role_id']         = $request->input('role_id');
         }else{
@@ -116,7 +123,7 @@ class UserController extends Controller
             $credentials['image_url'] = $url;
         }
 
-        $user = User::create($credentials);
+        $user = User::with('role', 'permissions')->create($credentials);
 
         if(!$user){
             return response()->json([
@@ -124,6 +131,8 @@ class UserController extends Controller
             ]);
         }
 
+        event(new UserCreated($user));
+        
         return response()->json([
             'success' => 'Account created successfully',
             $user,

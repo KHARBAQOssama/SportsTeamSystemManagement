@@ -9,6 +9,14 @@ class Game extends Model
 {
     use HasFactory;
 
+    public function homeTeam(){
+        return $this->belongsTo(Team::class, 'home');
+    }
+
+    public function awayTeam(){
+        return $this->belongsTo(Team::class, 'away');
+    }
+    
     public function tournament(){
         return $this->belongsTo(Tournament::class);
     }

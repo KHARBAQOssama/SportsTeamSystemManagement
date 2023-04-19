@@ -50,12 +50,8 @@ Route::group([
     Route::post('reset',[AuthController::class , 'reset']);
 });
 
-Route::post('user/{user}/deleteImage',[UserController::class,'deleteUserImage']);
-Route::put('user/{user}/updateImage',[UserController::class,'updateUserImage']);
-Route::post('user/deleteImage',[UserController::class,'updateUserImage']);
 Route::put('user/updateImage',[UserController::class,'updateSelfImage']);
 Route::put('user/update',[UserController::class,'updateSelf']);
-Route::post('user/search',[UserController::class,'getBySearch']);
 Route::post('users/add',[UserController::class,'storeByAdmin']);
 Route::apiResource('user',UserController::class);
 

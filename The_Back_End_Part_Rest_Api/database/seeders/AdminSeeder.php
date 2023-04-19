@@ -18,8 +18,8 @@ class AdminSeeder extends Seeder
             'first_name' => 'The',
             'last_name' => 'Admin',
             'birth_day' => '1999-01-01',
-            'role_id' => '4',
-            'email' => 'admin@admin',
+            'role_id' => '1',
+            'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),

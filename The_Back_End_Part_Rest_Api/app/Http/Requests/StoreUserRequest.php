@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
@@ -28,9 +29,14 @@ class StoreUserRequest extends FormRequest
             'birth_day'     => 'required|date|before:' . date('Y-m-d', strtotime('-15 years')),
             'password'      => 'required|string|min:8|confirmed',
             'image_url'     => 'nullable|url',
+            'sport_id'      => 'required|integer'
         ];
-        if(request('role_id') && request('role_id') != 1){
-            $rules['sport_id'] = 'required|integer';
+        $admin = Role::where('name','admin')->first()->id;
+        $fan = Role::where('name','fan')->first()->id;
+        if(request('role_id')){
+            if(request('role_id') == $admin || request('role_id') == $fan){
+                $rules['sport_id'] = '';
+            }
         }
         return $rules;
     }

@@ -21,7 +21,7 @@ class TeamFactory extends Factory
             'name' => fake()->company(),
             'city' => fake()->city(),
             'country' => fake()->country(),
-            'image_url' => '/storage/images/teamDefaultImage.png',
+            'image_url' => 'http://localhost:8000/storage/images/team-default.png',
             'stadium' => fake()->company(),
             'slag' => strtoupper(Str::random(3)),
         ];
