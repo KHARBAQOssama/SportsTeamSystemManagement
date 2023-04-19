@@ -42,7 +42,7 @@
                     
                 </div>
                 <div class="table-body d-flex flex-column">
-                    <div class="text-gold fs-5 justify-content-center h-70 d-flex align-items-center no-data" v-if="!length && !loader">
+                    <div class="text-gold fs-5 justify-content-center h-70 d-flex align-items-center no-data" v-if="!length">
                         No Users Found !!!
                     </div>
                     <div v-for="user  in users"  :class="auth.id == user.id ?  'trow d-flex justify-content-between bg-cold' : 'trow d-flex w-100 justify-content-between'" :key="user.id">
@@ -182,9 +182,6 @@ export default {
     },
     created(){
         useUserStore().fetchUsers(this.search)
-        useRoleStore().fetchRoles()
-        useSportStore().fetchSports()
-        useAuthStore().me()
     },
     computed:{
         users(){

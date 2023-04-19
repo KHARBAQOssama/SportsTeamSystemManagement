@@ -3,7 +3,7 @@ import api from '@/api'
 
 export const useTournamentStore = defineStore('tournament', {
   state: () => ({
-    tournaments: null,
+    tournaments: [],
     tournament: {
       name:'',
       win_points:null,
@@ -14,6 +14,15 @@ export const useTournamentStore = defineStore('tournament', {
     }
   }),
   actions: {
+     fetchTournaments(search) {
+       api.get('/tournament',search)
+            .then((result) => {
+              console.log(result.data)
+                this.tournaments = result.data
+            }).catch((err) => {
+                console.log(err);
+            });
+    },
     async store(data) {
         await api.post('/tournament',data)
         .then((response) => {
@@ -22,13 +31,22 @@ export const useTournamentStore = defineStore('tournament', {
             console.log(err);
         });
     },
-    initializeTournament(data){
-      this.tournament.name = data.name
-      this.tournament.win_points = data.win_points
-      this.tournament.loss_points = data.loss_points
-      this.tournament.draw_points = data.draw_points
-      this.tournament.start_date = data.start_date
-      this.tournament.randomMatches = data.randomMatches
+    async deleteTournament(tournament) {
+      await api.delete(`/tournament/${tournament}`).then((response)=>{
+        this.message = response.data.message
+        console.log(response)
+      })
+      .catch((error)=>{console.log(error)})
+    },
+    
+    async updateTournament(tournament) {
+      console.log(tournament);
+      await api.post(`/tournament/${tournament.id}`, tournament)
+      .then((response)=>{
+        this.message = response.data.message
+        console.log(response)
+      })
+      .catch((error)=>{console.log(error)})
     },
   }
 })

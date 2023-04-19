@@ -20,11 +20,11 @@
                     <ion-icon name="football-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Sports</span>
                 </router-link>
-                <router-link to="/" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link to="/dashboard/games" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="flash-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Games</span>
                 </router-link>
-                <router-link to="/" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link to="/dashboard/tournaments" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="trophy-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Tournaments</span>
                 </router-link>

@@ -3,12 +3,14 @@ import ResetPassword from './views/ResetPassword.vue'
 import SignPage from './views/SignPage.vue'
 import LandingPage from './views/LandingPage.vue'
 import Dashboard from './views/Dashboard.vue'
-import AddTournamentForm from './components/AddTournamentForm.vue'
+import AddTournamentForm from './components/tournament/AddTournamentForm.vue'
 import Footer from './components/Footer.vue'
 import Profile from './components/Profile.vue'
+import Tournaments from './components/Tournaments.vue'
 import Test from './components/Test.vue'
 import DashboardContent from './components/DashboardContent.vue'
 import Users from './components/Users.vue'
+import Games from './components/Games.vue'
 
 const routes = [
     {
@@ -36,6 +38,21 @@ const routes = [
                 path: 'users',
                 component: Users,
                 name: 'users'
+            },
+            {
+                path: 'Games',
+                component: Games,
+                name: 'games'
+            },
+            {
+                path: 'tournaments',
+                component: Tournaments,
+                name: 'tournaments'
+            },
+            {
+                path: 'tournaments/add',
+                component: AddTournamentForm,
+                name: 'tournaments.add'
             },
         ]
     },

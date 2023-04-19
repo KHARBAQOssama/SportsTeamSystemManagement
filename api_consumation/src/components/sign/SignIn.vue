@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import { useAuthStore } from '../stores/authStore';
-import ForgetPassword from './ForgetPassword.vue';
+import { useAuthStore } from '../../stores/authStore';
+import ForgetPassword from '../ForgetPassword.vue';
 // import { useRouter } from 'vue-router';
 
-import router from '../routes';
+import router from '../../routes';
 
 export default {
     emits: ['message'],

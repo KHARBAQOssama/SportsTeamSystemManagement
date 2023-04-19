@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import {useTeamStore} from '../stores/TeamStore'
-import {useTournamentStore} from '../stores/tournamentStore'
+import {useTeamStore} from '../../stores/teamStore'
+import {useTournamentStore} from '../../stores/tournamentStore'
 export default {
   data(){
     return {

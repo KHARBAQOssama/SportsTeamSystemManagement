@@ -30,6 +30,7 @@ export const useAuthStore = defineStore('auth', {
           localStorage.setItem('token', access_token);
           await this.me();
         }
+        
     },
     async me() {
         await api.post('/auth/me')

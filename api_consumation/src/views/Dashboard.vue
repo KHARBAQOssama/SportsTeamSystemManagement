@@ -13,11 +13,26 @@
 <script>
 import Sidebar from '../components/Sidebar.vue'
 import GlobalSearch from '../components/GlobalSearch.vue'
+import { useUserStore } from '../stores/userStore'
+import { useAuthStore } from '../stores/authStore'
+import { useSportStore } from '../stores/sportStore'
+import { useTeamStore } from '../stores/teamStore'
+import { useRoleStore } from '../stores/roleStore'
+
+import router from '../routes';
+
 export default {
     components:{
         Sidebar,
         GlobalSearch
-    }
+    },
+    async created(){
+        await useAuthStore().me()
+        if(useAuthStore().user == null) router.push('/')
+        useRoleStore().fetchRoles()
+        useSportStore().fetchSports()
+        
+    },
 
 }
 </script>

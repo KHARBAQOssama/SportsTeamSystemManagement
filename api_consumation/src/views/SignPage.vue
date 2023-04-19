@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import SignIn from '../components/SignIn.vue';
-import SignUp from '../components/SignUp.vue';
+import SignIn from '../components/sign/SignIn.vue';
+import SignUp from '../components/sign/SignUp.vue';
 
 import router from '../routes';
 
@@ -32,10 +32,10 @@ export default {
     },
     computed:{
     },
-    created(){
-        // console.log('hello')
-        // await useAuthStore().me();
-        if(useAuthStore().user) router.push('/');
+    async created(){
+        console.log('hello')
+        await useAuthStore().me();
+        if(useAuthStore().user != null) router.push('/');
     },
     methods:{
         signUpView(){

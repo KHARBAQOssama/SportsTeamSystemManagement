@@ -40,8 +40,7 @@ export const useUserStore = defineStore('user', {
     },
 
     async createUser(user) {
-      const response = await api.post('/users/add', user)
-      this.user.push(response.data.user)
+      const response = await this.handleErrors(api.post('/users/add', user))
     },
 
     async updateUser(user) {

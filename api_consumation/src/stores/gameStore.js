@@ -8,10 +8,11 @@ export const useGameStore = defineStore('game', {
         gameAdded: {}
     }),
     actions: {
-        async fetchTeams() {
+        async fetchGames() {
             await api.get('/game')
             .then((response) => {
-                this.teams = toRaw(response.data) ;
+                this.games = toRaw(response.data);
+                console.log(this.games)
             }).catch((err) => {
                 console.log(err);
             });
