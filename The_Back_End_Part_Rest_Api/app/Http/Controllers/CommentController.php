@@ -33,7 +33,7 @@ class CommentController extends Controller
 
         $comment = Comment::create($credentials);
 
-        return response()->json(['success' => 'comment has been added successfully']);
+        return response()->json(['message' => 'comment has been added successfully']);
     }
 
     /**
