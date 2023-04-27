@@ -11,36 +11,24 @@ export const useAuthStore = defineStore('auth', {
 
   },
   actions: {
-    // async login(data) {
-    //     await api.post('/auth/login',data)
-    //     .then((response) => {
-    //         console.log(response.data)
-    //         const { access_token } = response.data
-    //         localStorage.setItem('token', access_token)
-    //     }).catch((err) => {
-    //         console.log(err);
-    //     });
-    //     this.me()
-    // },
     async login(data) {
         const response = await this.handleErrors(api.post('/auth/login', data));
         if (response) {
           console.log(response.data);
           const { access_token } = response.data;
           localStorage.setItem('token', access_token);
-          await this.me();
+          
         }
-        
+        await this.me();
     },
     async me() {
-        await api.post('/auth/me')
+        return await api.post('/auth/me')
         .then((response) => {
             this.user = response.data
-            console.log(response);
+            return response.data
         }).catch((err) => {
-            console.log('from me');
-            console.log(err);
             this.user = null;
+            return false
         });
     },
     async refresh() {
@@ -50,6 +38,13 @@ export const useAuthStore = defineStore('auth', {
           const { access_token } = response.data;
           localStorage.setItem('token', access_token);
           await this.me();
+        }
+    },
+    async logOut() {
+        const response = await this.handleErrors(api.post('/auth/logout'));
+        if (response) {
+          console.log(response.data);
+          localStorage.removeItem('token');
         }
     },
     async resetPassword(data) {

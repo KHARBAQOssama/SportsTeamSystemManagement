@@ -30,9 +30,9 @@ class UserController extends Controller
             $query->where('role_id', $role);
         }
 
-        if ($request->has('sport')) {
-            $sport = $request->input('sport');
-            $query->where('sport_id', $sport);
+        if ($request->has('branch')) {
+            $branch = $request->input('branch');
+            $query->where('branch_id', $branch);
         }
 
         if ($request->has('by_search')) {
@@ -44,7 +44,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->with(['role', 'permissions', 'sport'])->get();
+        $users = $query->with('role', 'permissions', 'branch')->get();
 
         return response()->json($users);
     }
@@ -105,10 +105,10 @@ class UserController extends Controller
         $fan = Role::where('name','fan')->first()->id;
 
         if($request->input('role_id') ==  $admin || $request->input('role_id') == $fan){
-            $credentials['sport_id']        = null;
+            $credentials['branch_id']        = null;
             $credentials['role_id']         = $request->input('role_id');
         }else{
-            $credentials['sport_id']        = $request->input('sport_id');
+            $credentials['branch_id']        = $request->input('branch_id');
             $credentials['role_id']         = $request->input('role_id');
         }
 
@@ -134,7 +134,7 @@ class UserController extends Controller
         event(new UserCreated($user));
         
         return response()->json([
-            'success' => 'Account created successfully',
+            'message' => 'Account created successfully',
             $user,
         ],201);
     }
@@ -142,7 +142,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->role = $user->role;
-        $user->sport = $user->sport;
+        $user->branch = $user->branch;
         $user->permissions = $user->permissions;
         return response()->json($user);
     }
@@ -158,10 +158,10 @@ class UserController extends Controller
         ];
 
         if($request->input('role_id') == 1 || $request->input('role_id') == 4){
-            $credentials['sport_id']        = null;
+            $credentials['branch_id']        = null;
             $credentials['role_id']         = $request->input('role_id');
         }else{
-            $credentials['sport_id']        = $request->input('sport_id');
+            $credentials['branch_id']        = $request->input('branch_id');
             $credentials['role_id']         = $request->input('role_id');
         }
 

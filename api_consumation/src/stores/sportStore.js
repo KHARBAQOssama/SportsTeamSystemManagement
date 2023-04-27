@@ -10,7 +10,7 @@ export const useSportStore = defineStore('sport', {
         fetchSports() {
             api.get('/sport')
             .then((response) => {
-                console.log
+                console.log(response.data)
                 this.sports = response.data
             }).catch((err) => {
                 console.log(err);

@@ -8,11 +8,10 @@ export const useTeamStore = defineStore('team', {
         teamAdded: {}
     }),
     actions: {
-        fetchTeams() {
-            api.get('/team')
+        async fetchTeams() {
+            await api.get('/team')
             .then((response) => {
-                this.teams = toRaw(response.data) ;
-                // console.log(response.data) ;
+                this.teams = response.data ;
                 // return toRaw(response.data) ;
                 localStorage.setItem('myTeams',JSON.stringify(this.teams))
             }).catch((err) => {

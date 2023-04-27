@@ -11,13 +11,16 @@
             <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link class="nav-link" to="#">Store</router-link>
+            <router-link class="nav-link" to="/store">Store</router-link>
           </li>
           <li class="nav-item mx-3">
             <router-link class="nav-link" to="#">Contact Us</router-link>
           </li>
           <li class="nav-item mx-3">
             <router-link class="nav-link" to="#">About</router-link>
+          </li>
+          <li class="nav-item mx-3" v-if="user">
+            <router-link class="nav-link" to="/"  @click="logOut">Log Out</router-link>
           </li>
         </ul>
       </div>
@@ -27,6 +30,10 @@
 
 <script>
 import { useAuthStore } from '../stores/authStore';
+
+
+import router from '../routes';
+
 export default {
   computed:{
     user(){
@@ -34,6 +41,12 @@ export default {
     }
   },
   created(){
+  },
+  methods:{
+    async logOut(){
+      await useAuthStore().logOut();
+      router.push('/')
+    }
   }
 }
 </script>

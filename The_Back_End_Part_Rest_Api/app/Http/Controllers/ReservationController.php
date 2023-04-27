@@ -29,24 +29,34 @@ class ReservationController extends Controller
             return response()->json(['error' =>'You can not reserve a ticket for this game'],403);
         }
 
-        $total_price = $game->ticket_price *  $request->input('tickets_number');
+        $user_id = JWTAuth::user()->id;
+        if(Reservation::where('game_id',$game->id)->where('user_id',$user_id)->first()){
+            return response()->json(['message'=>'Already reserved']);
+        }
+
+        $total_price = $game->ticket_price;
 
         $credentials = [
-            'user_id' => JWTAuth::user()->id,
+            'user_id' => $user_id,
             'game_id' => $game->id,
-            'tickets_number' => $request->input('tickets_number'),
+            'tickets_number' => 1,
             'total_price' => $total_price,
         ];
 
         $reservation = Reservation::create($credentials);
-
-        return response()->json(['success'=>'you reserved a ticket(s) for the game ('.Team::find($game->home)->name.'-'.Team::find($game->away)->name.')'],201);
+        $game->update([
+            'seats_available' => $game->seats_available - 1
+        ]);
+        return response()->json(['message'=>'you reserved a ticket']);
     }
 
     public function reservationDecision(Request $request,Reservation $reservation){
         $decision = $request->input('decision');
         if($decision == 'cancel'){
             $reservation->update(['status'=>'Canceled']);
+            // $game->update([
+            //     'seats_available' => $game->seats_available + 1
+            // ]);
         }else if($decision == 'confirm'){
             $reservation->update(['status'=>'Confirmed']);
         }

@@ -7,9 +7,6 @@
         <label for="start_date" class="me-3 w-50">Start Date</label>
         <input id="start_date" class="p-2 w-50 ms-auto" type="date" name="" placeholder="start_date" v-model="tournament.start_date">
       </div>
-      <input class="col-8 m-auto my-2 p-2" type="number" name="" placeholder="win_points" v-model="tournament.win_points" id="">
-      <input class="col-8 m-auto my-2 p-2" type="number" name="" placeholder="loss_points" v-model="tournament.loss_points" id="">
-      <input class="col-8 m-auto my-2 p-2" type="number" name="" placeholder="draw_points" v-model="tournament.draw_points" id="">
       <input class="col-8 m-auto my-2 p-2" type="number" name="" placeholder="date_def" v-model="tournament.date_def" id="">
       <img class="col-5 d-block m-auto" v-show="tournament.image" :src="tournament.image" alt="">
       <div class="col-8 my-2 m-auto row">
@@ -77,9 +74,9 @@ export default {
       addNew:false,
       tournament:{
           name:'',
-          win_points:null,
-          draw_points:null,
-          loss_points:null,
+          // win_points:null,
+          // draw_points:null,
+          // loss_points:null,
           start_date:null,
           date_def:null,
           image:null
@@ -91,8 +88,8 @@ export default {
       return useTeamStore().teamAdded
     }
   },
-  created(){
-    useTeamStore().fetchTeams();
+  async created(){
+    await useTeamStore().fetchTeams();
     this.existingTeams = JSON.parse(localStorage.getItem('myTeams'));
   },
   methods:{

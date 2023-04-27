@@ -33,7 +33,7 @@ export default {
                 birth_day: useUserStore().user.birth_day,
                 permissions: useUserStore().user.permissions,
                 role: useUserStore().user.role,
-                sport: useUserStore().user.sport,
+                branch: useUserStore().user.branch,
                 image: '',
             };
         },

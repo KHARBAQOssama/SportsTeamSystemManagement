@@ -13,13 +13,15 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Blog::all());
-    }
-
-    public function getBlogComments(Blog $blog){
-        return response()->json($blog->comments);
+        $query = Blog::query();
+        if($request->input('by_search')){
+            $title = $request->input('by_search');
+            $query->where('title','like','%'.$title.'%');
+        }
+        $blogs = $query->with('publisher','comments')->get();
+        return response()->json($blogs);
     }
 
     /**
@@ -46,18 +48,16 @@ class BlogController extends Controller
 
         $blog = Blog::create($credentials);
 
-        return response()->json(['success' => 'Blog has been added successfully']);
+        return response()->json(['message' => 'Blog added']);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Blog $blog)
+    public function show($id)
     {
-        $data = $blog;
-        $data['comments'] = $blog->comments;
-        $data['user'] = $blog->user;
-        return response()->json($data);
+        $blog = Blog::with('publisher.branch','comments.publisher')->find($id);
+        return response()->json($blog);
     }
 
     /**
@@ -83,7 +83,7 @@ class BlogController extends Controller
 
         $blog->update($credentials);
 
-        return response()->json(['success' => 'Blog has been updated successfully']);
+        return response()->json(['message' => 'Blog has been updated successfully']);
     }
 
     /**
@@ -92,6 +92,6 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         $blog->delete();
-        return response()->json(['success' => 'Blog has been deleted successfully']);
+        return response()->json(['message' => 'Blog deleted']);
     }
 }

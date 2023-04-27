@@ -13,8 +13,8 @@ class Comment extends Model
         return $this->belongsTo(Blog::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function publisher(){
+        return $this->belongsTo(User::class,'user_id');
     }
 
     protected $fillable = [

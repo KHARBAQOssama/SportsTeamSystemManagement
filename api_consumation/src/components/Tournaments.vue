@@ -2,9 +2,9 @@
     <div class="w-100 d-flex flex-column justify-content-center align-items-center h-100">
         <div class="row w-100 g-4 mt-1  mx-auto">
                 <input class="col-md-5 col-12 mx-auto" type="text" v-model="search.params.by_search" placeholder="Search A User" @keyup="filter()">
-                <select class="col-12 col-md-5" @change="filter()" name="" v-model="search.params.sport">
-                    <option value="null">filter by sport</option>
-                    <option v-for="sport in sports" :key="sport.id" :value="sport.id">{{ sport.name }}</option>
+                <select class="col-12 col-md-5" @change="filter()" name="" v-model="search.params.branch">
+                    <option value="null">filter by branch</option>
+                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }}</option>
                 </select>
         </div>
         <div class="add my-2 d_flex">
@@ -20,8 +20,8 @@
                         <div class="h-100 d-flex justify-content-center align-items-center full-name">
                             Name
                         </div>
-                        <div class="h-100 d-flex justify-content-center align-items-center sport">
-                            Sport
+                        <div class="h-100 d-flex justify-content-center align-items-center branch">
+                            branch
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center start-date">
                             Start date
@@ -34,7 +34,7 @@
                     <div class="text-gold fs-5 justify-content-center h-70 d-flex align-items-center no-data" v-if="!length">
                         No Tournaments Found !!!
                     </div>
-                     <div v-for="tournament  in tournaments"  class="trow d-flex w-100 justify-content-between" :key="tournament.id">
+                     <div v-for="tournament  in tournaments"  class="trow d-flex w-100 justify-content-between cursor-pointer" :key="tournament.id">
                        <div class="h-100 d-flex justify-content-center align-items-center image">
                             <div class="rounded-circle overflow-hidden">
                                 <img :src="tournament.image_url" class="h-100"  alt="">
@@ -43,8 +43,8 @@
                         <div class="h-100 d-flex justify-content-center align-items-center full-name">
                             <p>{{ tournament.name }}</p>
                         </div>
-                        <div class="h-100 d-flex justify-content-center align-items-center sport">
-                            <p class="signification bg-cold text-gold">{{ tournament.sport.name }}</p>
+                        <div class="h-100 d-flex justify-content-center align-items-center branch">
+                            <p class="signification bg-cold text-gold">{{ tournament.branch.name }}</p>
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center start-date">
                             <p class="signification bg-cold text-gold">{{ tournament.start_date }}</p>
@@ -53,6 +53,7 @@
                             <button class="border-0 bg-transparent rounded-1 p-1 px-2 watch" data-bs-toggle="modal" data-bs-target="#event" @click="to('watch',tournament.id)"><i class="uil text-success uil-eye"></i></button>
                             <button class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',tournament.id)"><i class="uil text-warning uil-pen"></i></button>
                             <button class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',tournament.id)"><i class="uil text-danger uil-trash"></i></button>
+                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="viewStanding(tournament.id)"><i class="uil text-danger uil-list-ol"></i></button>
                         </div>
                     </div> 
                 </div>
@@ -70,11 +71,9 @@
                 <h4 v-if="to_delete" class="" >Delete Tournament</h4>
                 <h4 v-if="to_edit" class="" >Edit Tournament</h4>
                 <h4 v-if="to_add" class="" >Add Tournament</h4>
+                <h4 v-if="standing" class="">{{ standing[0].tournament.name }} Standing</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cancel()"></button>
             </div>
-           <!-- <div v-if="to_delete" class="modal-body text-center">
-                <p class="text-danger">Are you sure you want to delete <span class="fs-5 fw-bold">{{ to_delete.first_name +' '+ to_delete.last_name }}</span> Account !!!</p>
-            </div> -->
             <div v-if="to_add" class="modal-body d-flex flex-column px-4">
                 <AddTournament></AddTournament>
             </div>
@@ -84,7 +83,7 @@
                         <img :src="to_watch.image_url" class="w-100" alt="">
                     </div>
                     <h3>{{ to_watch.name}}</h3> 
-                    <h3>{{ to_watch.sport.name }}</h3>
+                    <h3>{{ to_watch.branch.name }}</h3>
                     <h3>{{ to_watch.start_date }}</h3>
                 </div>
             </div>
@@ -100,6 +99,34 @@
                 <input type="text" v-model="to_edit.name" placeholder="Name">
                 <input type="date" v-model="to_edit.start_date">
             </div>
+            <div v-if="view_st" class="modal-body d-flex flex-column w-100">
+                <table class="w-100 my-2">
+                    <thead class="w-100">
+                        <tr class="bg-gold text-white">
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">PL</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:44%;">Team</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">MP</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">W</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">D</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">L</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">DEF</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">P</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(stand,index) in standing" :key="index" :class="stand.team.name != 'Olympic Club Youssoufia'? 'bg-dark text-white' : 'bg-cold text-gold'">
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">{{ index + 1 }}</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:44%;">{{ stand.team.name }}</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">{{ stand.play }}</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">{{ stand.win }}</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">{{ stand.draw }}</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">{{ stand.lose }}</th>
+                            <th class="fw-light fs-small py-1 text-center " style="width:8%;">{{ stand.def }}</th>
+                            <th class="fw-light fs-small py-1 text-center fw-bold text-gold" style="width:8%;">{{ stand.points }}</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div v-if="to_edit || to_delete || to_add" class="d-flex justify-content-end">
                 <button type="button" class="bg-transparent border-0 text-gold mx-2" data-bs-dismiss="modal" @click="cancel">Close</button>
                 <button v-if="to_delete" type="button" class="brand-gold-button mx-3" @click="destroy">Delete</button>
@@ -112,7 +139,7 @@
 </template>
 
 <script>
-import { useSportStore } from '../stores/sportStore';
+import { useBranchStore } from '../stores/branchStore';
 import { useAuthStore } from '../stores/authStore';
 import { useTournamentStore } from '../stores/tournamentStore';
 import AddTournament from '../components/tournament/AddTournamentForm.vue';
@@ -126,7 +153,7 @@ export default {
         return {
             search :{
                 params:{
-                    sport:null,
+                    branch:null,
                     by_search:''
                 }
             },
@@ -134,6 +161,7 @@ export default {
             to_watch: null,
             to_edit: null,
             to_add: false,
+            view_st: false,
         }
     },
     created(){
@@ -143,14 +171,17 @@ export default {
         tournaments(){
             return useTournamentStore().tournaments
         },
-        sports(){
-            return useSportStore().sports;
+        branches(){
+            return useBranchStore().branches;
         },
         auth(){
             return useAuthStore().user
         },
         length(){
             return useTournamentStore().tournaments.length
+        },
+        standing(){
+            return useTournamentStore().standing
         },
     },
     methods:{
@@ -159,6 +190,7 @@ export default {
             this.to_edit = null
             this.to_watch = null
             this.to_add = null
+            this.view_st = false
             switch(option){
                 case 'add':
                     this.to_add = true
@@ -179,6 +211,7 @@ export default {
             this.to_delete = null
             this.to_edit = null
             this.to_watch = null
+            this.view_st = false
             console.log(this.to_delete,this.to_edit,this.to_watch)
         },
         imageChanged(event){
@@ -206,6 +239,10 @@ export default {
             useTournamentStore().fetchTournaments(this.search)
             this.tournaments = useTournamentStore().tournaments
             this.length = useTournamentStore().tournaments.length
+        },
+        async viewStanding(id){
+            await useTournamentStore().viewStanding(id);
+            this.view_st = true
         }
         
     }
@@ -255,7 +292,7 @@ export default {
         .full-name,start-date{
             width: 270px;
         }
-        .sport,.image{
+        .branch,.image{
             width: 65px;
         }
         .image>div{

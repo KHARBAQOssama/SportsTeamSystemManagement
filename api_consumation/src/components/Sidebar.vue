@@ -16,9 +16,9 @@
                     <ion-icon name="people-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Users</span>
                 </router-link>
-                <router-link to="/" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link to="/dashboard/branches" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="football-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
-                    <span class="ms-1 text-gold">Sports</span>
+                    <span class="ms-1 text-gold">Branches</span>
                 </router-link>
                 <router-link to="/dashboard/games" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="flash-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
@@ -28,11 +28,11 @@
                     <ion-icon name="trophy-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Tournaments</span>
                 </router-link>
-                <router-link to="/" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link to="/dashboard/blogs" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="albums-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Blogs</span>
                 </router-link>
-                <router-link to="/" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link to="/dashboard/products" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="pricetags-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Products</span>
                 </router-link>
@@ -43,15 +43,18 @@
                 
             </div>
             <div class="w-100 mt-auto py-2">
-                <a href="https://www.google.com" class="ps-5 py-2 nav-item overflow-hidden d-flex  position-relative">
+                <router-link to="/"  @click="logOut" class="ps-5 py-2 nav-item overflow-hidden d-flex  position-relative">
                     <ion-icon name="log-out-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold text-nowrap">Log Out</span>
-                </a>
+                </router-link>
             </div>
     </nav>
 </template>
 
 <script>
+import { useAuthStore } from '../stores/authStore';
+import router from '../routes';
+
 export default {
     components:{
     },
@@ -63,6 +66,10 @@ export default {
     methods:{
         toggle(){
             this.collapsed = !this.collapsed
+        },
+        async logOut(){
+            await useAuthStore().logOut();
+            router.push('/')
         }
     }
 

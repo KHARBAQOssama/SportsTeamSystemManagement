@@ -26,8 +26,7 @@ export default {
     created(){
         this.theClass = 'alert show showAlert'
         setTimeout(function(){
-            this.theClass = 'alert hide'
-            console.log(this.theClass)
+          
         },4000);
     },
     methods:{

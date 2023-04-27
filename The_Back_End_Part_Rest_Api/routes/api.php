@@ -6,16 +6,19 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SportController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\GlobalSearchController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TournamentController;
 use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\GlobalSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,8 +59,11 @@ Route::post('users/add',[UserController::class,'storeByAdmin']);
 Route::apiResource('user',UserController::class);
 
 
-Route::get('sport/community',[SportController::class,'authenticatedSportUsers']);
-Route::get('sport/users',[SportController::class,'getSportUsers']);
+Route::get('branch/community',[BranchController::class,'authenticatedBranchUsers']);
+Route::get('branch/users',[BranchController::class,'getBranchUsers']);
+Route::apiResource('branch',BranchController::class);
+
+
 Route::apiResource('sport',SportController::class);
 
 
@@ -65,11 +71,10 @@ Route::post('team/search',[TeamController::class,'getBySearch']);
 Route::apiResource('team',TeamController::class);
 
 
-Route::get('tournament/{id}/standing',[TournamentController::class,'tournamentStandings']);
+Route::get('tournament/{tournament}/standing',[TournamentController::class,'tournamentStandings']);
 Route::apiResource('tournament',TournamentController::class);
 
-Route::get('games-in-sport',[GameController::class,'getGamesInSport']);
-Route::get('games/next',[GameController::class,'nextGame']);
+Route::get('game/next',[GameController::class,'nextGame']);
 Route::apiResource('game',GameController::class);
 
 Route::get('blog/{blog}/comments',[BlogController::class,'getBlogComments']);
@@ -79,6 +84,11 @@ Route::apiResource('comment',CommentController::class);
 
 Route::apiResource('reservation',ReservationController::class);
 
+Route::apiResource('product',ProductController::class);
+
+Route::apiResource('cart',CartController::class);
+
 Route::get('role',[RoleController::class,'index']);
 
 
+Route::get('/search',[GlobalSearchController::class,'index']);

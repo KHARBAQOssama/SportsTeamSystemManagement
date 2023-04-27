@@ -30,6 +30,12 @@ body{
   position: relative;
 }
 
+.fs-small{
+  font-size: 12px;
+}
+.fs-smaller{
+  font-size: 10px;
+}
 
 
 input[type="file"] {
@@ -220,7 +226,7 @@ body::-webkit-scrollbar-thumb,#app::-webkit-scrollbar-thumb {
   background-color: rgba(218, 165, 32, 0.256);
 }
 
-input , select{
+input , textarea, select{
   padding: .3em 1em;
   margin: 1em auto;
   border-radius:  5px;
@@ -236,4 +242,14 @@ input , select{
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
+}
+
+.text-justify{
+  text-align: justify !important;
+}
+
+@media (min-width: 768px) {
+  .h-md-90{
+    height: 90vh;
+  } 
 }

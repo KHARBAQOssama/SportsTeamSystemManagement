@@ -15,11 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('image_url')->nullable();
-            $table->unsignedBigInteger('sport_id');
-            $table->foreign('sport_id')->references('id')->on('sports')->onDelete('cascade');
-            $table->integer('win_points');
-            $table->integer('loss_points');
-            $table->integer('draw_points');
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->date('start_date');
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

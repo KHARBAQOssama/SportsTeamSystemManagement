@@ -25,8 +25,8 @@ class Game extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function sport(){
-        return $this->belongsTo(Sport::class);
+    public function branch(){
+        return $this->belongsTo(Branch::class);
     }
 
     protected $fillable = [
@@ -47,7 +47,7 @@ class Game extends Model
         'seats_number',
         'seats_available',
         'ticket_price',
-        'sport_id',
+        'branch_id',
         'game_place',
         'created_by',
         'updated_by',

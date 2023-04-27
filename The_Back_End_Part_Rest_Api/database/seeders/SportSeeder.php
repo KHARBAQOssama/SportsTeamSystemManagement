@@ -15,20 +15,70 @@ class SportSeeder extends Seeder
     {
         $sports = [
             [
-                'name' => 'Soccer',
-                'icon' => 'http://localhost:8000/storage/images/soccer.png',
+                'name' => 'Football',
+                'symbol' => '⚽',
+                'win_points' => 3,
+                'loss_points' => 0,
+                'draw_points' => 1,
             ],
             [
                 'name' => 'Basketball',
-                'icon' => 'http://localhost:8000/storage/images/basketball.png',
+                'symbol' => '🏀',
+                'win_points' => 2,
+                'loss_points' => 0,
+                'draw_points' => 1,
+            ],
+            [
+                'name' => 'Baseball',
+                'symbol' => '⚾',
+                'win_points' => 1,
+                'loss_points' => 0,
+                'draw_points' => 0,
+            ],
+            [
+                'name' => 'Hockey',
+                'symbol' => '🏒',
+                'win_points' => 2,
+                'loss_points' => 0,
+                'draw_points' => 1,
+            ],
+            [
+                'name' => 'Rugby',
+                'symbol' => '🏉',
+                'win_points' => 4,
+                'loss_points' => 0,
+                'draw_points' => 2,
+            ],
+            [
+                'name' => 'Volleyball',
+                'symbol' => '🏐',
+                'win_points' => 2,
+                'loss_points' => 0,
+                'draw_points' => 1,
             ],
             [
                 'name' => 'Handball',
-                'icon' => 'http://localhost:8000/storage/images/handball.png',
+                'symbol' => '🤾',
+                'win_points' => 2,
+                'loss_points' => 0,
+                'draw_points' => 1,
             ],
+            [
+                'name' => 'Water Polo',
+                'symbol' => '🤽',
+                'win_points' => 2,
+                'loss_points' => 0,
+                'draw_points' => 1,
+            ],
+            [
+                'name' => 'Cricket',
+                'symbol' => '🏏',
+                'win_points' => 2,
+                'loss_points' => 0,
+                'draw_points' => 1,
+                ],
         ];
-
+        
         DB::table('sports')->insert($sports);
-
     }
 }

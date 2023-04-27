@@ -8,21 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Sport extends Model
 {
     use HasFactory;
-    
-    public function users(){
-        return $this->hasMany(User::class);
-    }
 
-    public function tournaments(){
-        return $this->hasMany(Tournament::class);
+    public function branches(){
+        return $this->hasMany(Branch::class);
     }
-
-    public function games(){
-        return $this->hasMany(Game::class);
-    }
-
-    protected $fillable = [
-        'name',
-        'icon'
-    ];
 }

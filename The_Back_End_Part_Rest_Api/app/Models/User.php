@@ -17,8 +17,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class);
     }
 
-    public function sport(){
-        return $this->belongsTo(Sport::class);
+    public function branch(){
+        return $this->belongsTo(Branch::class);
     }
 
     public function permissions()
@@ -55,7 +55,7 @@ class User extends Authenticatable implements JWTSubject
         'last_name',
         'email',
         'role_id',
-        'sport_id',
+        'branch_id',
         'birth_day',
         'password',
         'image_url'

@@ -9,10 +9,14 @@ class Tournament extends Model
 {
     use HasFactory;
 
-    public function sport(){
-        return $this->belongsTo(Sport::class);
+    public function branch(){
+        return $this->belongsTo(Branch::class);
     }
 
+    public function standings(){
+        return $this->hasMany(Standing::class);
+    }
+    
     public function games(){
         return $this->hasMany(Game::class);
     }
@@ -20,10 +24,7 @@ class Tournament extends Model
     protected $fillable = [
         'name',
         'image_url',
-        'sport_id',
-        'win_points',
-        'loss_points',
-        'draw_points',
+        'branch_id',
         'start_date',
         'created_by',
         'updated_by',

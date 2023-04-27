@@ -23,9 +23,6 @@ class StoreOrUpdateTournamentRequest extends FormRequest
     {
         return [
             'name'        => 'required|string',
-            'win_points'  => 'required|integer',
-            'loss_points' => 'required|integer',
-            'draw_points' => 'required|integer',
             'start_date'  => 'required|date|after:today',
             'teams'       => 'required|array',
             'teams,*'     => 'exists:teams',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
@@ -11,7 +12,7 @@ class ProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,12 +23,12 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' =>'required|',
+            'title' =>'required',
             'short_description' => 'required|max:50',
             'description' => 'required|max:1000|min:300',
             'price' => 'required',
             'quantity' => 'required',
-            'images' => 'array|required',
+            'images' => 'nullable|array',
         ];
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreOrUpdateTournamentRequest;
+use App\Models\Standing;
 
 class TournamentController extends Controller
 {
@@ -20,9 +21,9 @@ class TournamentController extends Controller
     public function index(Request $request)
     {   
         $query = Tournament::query();
-        if ($request->has('sport')) {
-            $sport = $request->input('sport');
-            $query->where('sport_id', $sport);
+        if ($request->has('branch')) {
+            $branch = $request->input('branch');
+            $query->where('branch_id', $branch);
         }
 
         if ($request->has('by_search')) {
@@ -30,7 +31,7 @@ class TournamentController extends Controller
             $query->where('name','LIKE','%'.$search.'%');
         }
 
-        $tournaments = $query->with(['sport','games'])->get();
+        $tournaments = $query->with(['branch','games'])->get();
         return response()->json($tournaments);
     }
 
@@ -81,8 +82,8 @@ class TournamentController extends Controller
             'referee2' => fake()->name(),
             'referee3' => fake()->name(),
             'tournament_id' => $tournament,
-            // 'sport_id' => 1,
-            'sport_id' => JWTAuth::user()->sport->id,
+            // 'branch_id' => 1,
+            'branch_id' => JWTAuth::user()->branch->id,
             'ticket_price' => $fans ? fake()->numberBetween(0,120) : null,
         ];
 
@@ -101,11 +102,8 @@ class TournamentController extends Controller
     {
         $credentials = [
             'name' => $request->input('name'),
-            'sport_id' => JWTAuth::user()->sport->id,
-            // 'sport_id' => 1,
-            'win_points' => $request->input('win_points'),
-            'loss_points' => $request->input('loss_points'),
-            'draw_points' => $request->input('draw_points'),
+            'branch_id' => JWTAuth::user()->branch->id,
+            // 'branch_id' => 1,
             'start_date' => $request->input('start_date'),
             'created_by' => JWTAuth::user()->id,
             // 'created_by' => 1,
@@ -182,7 +180,7 @@ class TournamentController extends Controller
         $tournament = Tournament::find($tournament_id);
 
         return response()->json([
-            $tournament,
+            'message' => 'tournament added',
         ]);
     }
 
@@ -200,8 +198,9 @@ class TournamentController extends Controller
         ]);
     }
 
-    public function tournamentStandings($id){
-        $games = Game::where('tournament_id', $id)->get();
+    public static function tournamentStandings(Tournament $tournament){
+        $tournament = Tournament::with('branch.sport')->find($tournament->id);
+        $games = Game::where('tournament_id', $tournament->id)->get();
 
         foreach ($games as $game) {
             $now = now();
@@ -235,10 +234,10 @@ class TournamentController extends Controller
                 $awayStanding->receive += $homeScore;
                 $awayStanding->def = $awayStanding->score - $awayStanding->receive;
                 
-                $tournament = Tournament::find($id);
-                $drawPoints = $tournament->draw_points;
-                $lossPoints = $tournament->loss_points;
-                $winPoints = $tournament->win_points;
+                // $tournament = Tournament::find($id);
+                $drawPoints = $tournament->branch->sport->draw_points;
+                $lossPoints = $tournament->branch->sport->loss_points;
+                $winPoints = $tournament->branch->sport->win_points;
 
                 if($homeScore == $awayScore){
 
@@ -274,18 +273,23 @@ class TournamentController extends Controller
 
         }
 
-        $standing = DB::table('standings')
-                    ->where('tournament_id', $id)
-                    ->orderByDesc('points')
-                    ->orderByDesc('def')
-                    ->get();
+
+        // $standing = DB::table('standings')
+        //             ->where('tournament_id', $id)
+        //             ->orderByDesc('points')
+        //             ->orderByDesc('def')
+        //             ->get();
+        $standing = Standing::with('team','tournament')
+                ->where('tournament_id',$tournament->id)
+                ->orderByDesc('points')
+                ->orderByDesc('def')
+                ->get();
         
         return response()->json($standing);
         
     }
 
     public function update(Request $request,Tournament $tournament){
-        return response()->json($request);
         $credentials = [
             'name'=> $request->input('name'),
         ];

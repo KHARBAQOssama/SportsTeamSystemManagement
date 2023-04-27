@@ -1,41 +1,33 @@
 import { defineStore } from 'pinia'
 import api from '@/api'
 
-export const useTournamentStore = defineStore('tournament', {
+export const useBlogStore = defineStore('blog', {
   state: () => ({
-    tournaments: [],
-    tournament: {
-      name:'',
-      win_points:null,
-      draw_points:null,
-      loss_points:null,
-      start_date:null,
-      teams: [{}],
-    },
-    standing:'',
-    message : ''
+    blogs: [],
+    message : '',
+    blog:null,
   }),
   actions: {
-     fetchTournaments(search) {
-       api.get('/tournament',search)
+     fetchBlogs(search) {
+       api.get('/blog',search)
             .then((result) => {
               console.log(result.data)
-                this.tournaments = result.data
+                this.blogs = result.data
             }).catch((err) => {
                 console.log(err);
             });
     },
-     viewStanding(id) {
-       api.get('/tournament/'+id+'/standing')
+    async getBlog(id) {
+        return await api.get('/blog/'+id)
             .then((result) => {
-              console.log(result.data)
-                this.standing = result.data
+                console.log(result.data)
+                return result.data
             }).catch((err) => {
                 console.log(err);
             });
     },
     async store(data) {
-        await api.post('/tournament',data)
+        await api.post('/blog',data)
         .then((response) => {
             console.log(response.data)
             this.message = response.data.message;
@@ -43,17 +35,26 @@ export const useTournamentStore = defineStore('tournament', {
             console.log(err);
         });
     },
-    async deleteTournament(tournament) {
-      await api.delete(`/tournament/${tournament}`).then((response)=>{
+    async storeComment(data) {
+        await api.post('/comment',data)
+        .then((response) => {
+            console.log(response.data)
+            this.message = response.data.message;
+        }).catch((err) => {
+            console.log(err);
+        });
+    },
+    async delete(blog) {
+      await api.delete(`/blog/${blog}`).then((response)=>{
         this.message = response.data.message
         console.log(response)
       })
       .catch((error)=>{console.log(error)})
     },
     
-    async updateTournament(tournament) {
-      console.log(tournament);
-      await api.post(`/tournament/${tournament.id}`, tournament)
+    async update(blog) {
+      console.log(blog);
+      await api.post(`/blog/${blog.id}`, blog)
       .then((response)=>{
         this.message = response.data.message
         console.log(response)

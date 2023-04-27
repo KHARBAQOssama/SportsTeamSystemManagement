@@ -2,17 +2,7 @@
     <div class="w-100 d-flex flex-column justify-content-center align-items-center h-100">
         <div class="filter mx-auto">
             <div class="w-100 my-2">
-                <input class="w-100 mx-auto m-1 px-3 p-1" type="text" v-model="search.params.by_search" placeholder="Search A User" @keyup="filter()">
-            </div>
-            <div class="w-100 d-flex">
-                <select class="col-5 p-1 m-0 me-auto" @change="filter()" name="" v-model="search.params.role">
-                    <option value="null">filter by role</option>
-                    <option v-for="role in roles" :key="role.id" :value="role.id">{{ role.name }}</option>
-                </select>
-                <select class="col-5 p-1 m-0 ms-auto" @change="filter()" name="" v-model="search.params.branch">
-                    <option value="null">filter by branch</option>
-                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }}</option>
-                </select>
+                <input class="w-100 mx-auto m-1 px-3 p-1" type="text" v-model="search.params.by_search" placeholder="Search A Blog" @keyup="filter()">
             </div>
         </div>
         <div class="add my-2 d_flex">
@@ -26,16 +16,16 @@
                         <i class="uil uil-image"></i>
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center full-name">
-                            Full Name
+                            title
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center email">
-                            Email
+                            Created By
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center branch">
                             branch
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center role">
-                            Role
+                            Comments
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center events">Events</div>
                     </div>
@@ -45,29 +35,28 @@
                     <div class="text-gold fs-5 justify-content-center h-70 d-flex align-items-center no-data" v-if="!length">
                         No Users Found !!!
                     </div>
-                    <div v-for="user  in users"  :class="auth.id == user.id ?  'trow d-flex justify-content-between bg-cold' : 'trow d-flex w-100 justify-content-between'" :key="user.id">
+                    <div v-for="blog  in blogs"  :class="auth.id == blog.id ?  'trow d-flex justify-content-between bg-cold' : 'trow d-flex w-100 justify-content-between'" :key="blog.id">
                         <div class="h-100 d-flex justify-content-center align-items-center image">
                             <div class="rounded-circle overflow-hidden">
-                                <img :src="user.image_url" class="h-100"  alt="">
+                                <img :src="blog.image_url" class="h-100"  alt="">
                             </div>
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center full-name">
-                            <p>{{ user.first_name }} {{ user.last_name }}</p>
+                            <p>{{ blog.title }}</p>
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center email">
-                            <p>{{ user.email }}</p>
+                            <p>{{ blog.publisher.first_name }} {{ blog.publisher.last_name }}</p>
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center branch">
-                            <p class="signification bg-cold text-gold" v-if="user.branch">{{ user.branch.name }}</p>
-                            <p class="signification bg-cold text-gold" v-else>all</p>
+                            <p class="signification bg-cold text-gold">{{ blog.title }}</p>
                         </div>
                         <div class="h-100 d-flex justify-content-center align-items-center role">
-                            <p class="signification bg-cold text-gold" v-if="user.role">{{ user.role.name }}</p>
+                            <p class="signification bg-cold text-gold">{{ blog.comments.length }} comments</p>
                         </div>
-                        <div :class=" auth.id == user.id ? 'h-100 d-flex justify-content-around align-items-center events opacity-0' : 'h-100 d-flex justify-content-around align-items-center events'">
-                            <button :disabled=" auth.id == user.id" class="border-0 bg-transparent rounded-1 p-1 px-2 watch" data-bs-toggle="modal" data-bs-target="#event" @click="to('watch',user.id)"><i class="uil text-success uil-eye"></i></button>
-                            <button :disabled=" auth.id == user.id" class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',user.id)"><i class="uil text-warning uil-pen"></i></button>
-                            <button :disabled=" auth.id == user.id" class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',user.id)"><i class="uil text-danger uil-trash"></i></button>
+                        <div class="h-100 d-flex justify-content-around align-items-center events">
+                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 watch" data-bs-toggle="modal" data-bs-target="#event" @click="to('watch',blog.id)"><i class="uil text-success uil-eye"></i></button>
+                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',blog.id)"><i class="uil text-warning uil-pen"></i></button>
+                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',blog.id)"><i class="uil text-danger uil-trash"></i></button>
                         </div>
                     </div>
                 </div>
@@ -80,66 +69,47 @@
         <div class="modal-dialog">
             <div class="modal-content rounded-0">
             <div class="modal-header">
-                <h4 v-if="to_watch" class="" >User Info</h4>
-                <h4 v-if="to_delete" class="" >Delete User</h4>
-                <h4 v-if="to_edit" class="" >Edit User</h4>
-                <h4 v-if="to_add" class="" >Add User</h4>
+                <h4 v-if="to_watch" class="" >Blog Info</h4>
+                <h4 v-if="to_delete" class="" >Delete Blog</h4>
+                <h4 v-if="to_edit" class="" >Edit Blog</h4>
+                <h4 v-if="to_add" class="" >Add Blog</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cancel()"></button>
             </div>
             <div v-if="to_delete" class="modal-body text-center">
                 <p class="text-danger">Are you sure you want to delete <span class="fs-5 fw-bold">{{ to_delete.first_name +' '+ to_delete.last_name }}</span> Account !!!</p>
             </div>
             <div v-if="to_add" class="modal-body d-flex flex-column px-4">
-                <input class="mx-auto" type="text" v-model="to_add.first_name" placeholder="First Name">
-                <input class="mx-auto" type="text" v-model="to_add.last_name" placeholder="Last Name">
+                <input class="mx-auto" type="text" v-model="to_add.title" placeholder="First Name">
+                <textarea class="mx-auto" rows="8" type="text" v-model="to_add.content" placeholder="Last Name"></textarea>
+                <div class="w-100 d-flex justify-content-center">
+                    <img v-if="to_add.image" :src="to_add.image" class="w-50" alt="">
+                </div>
                 <div class="mx-auto d-flex align-items-center'">
                      <input class="w-75" id="userImage" type="file" @change="$event=>imageChanged($event,'add')">
                     <label for="userImage"><i class="uil uil-image-plus me-2"></i>Choose An Image</label>
                 </div>
-                
-                <input class="mx-auto" type="date" v-model="to_add.birth_day">
-                <select v-model="to_add.role_id">
-                    <option value="null">Choose Role</option>
-                    <option v-for="role in roles" :key="role.id" :value="role.id">{{ role.name }}</option>
-                </select>
-                <select :value="(to_add.role_id != 2 && to_add.role_id != 3) ? '' : to_add.branch_id" v-model="to_add.branch_id" :disabled="(to_add.role_id != 2 && to_add.role_id != 3)">
-                    <option value="null">Choose branch</option>
-                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }}</option>
-                </select>
-                <input class="mx-auto" type="email" v-model="to_add.email" placeholder="Email">
-                <input class="mx-auto" type="password" v-model="to_add.password" placeholder="Password">
-                <input class="mx-auto" type="password" v-model="to_add.password_confirmation" placeholder="Password Confirmation">
             </div>
-            <div v-if="to_watch" class="modal-body px-4">
-                <div class="w-100 d-flex mb-3 align-items-center">
-                    <div class="overflow-hidden rounded-circle me-4" style="width: 100px; height: 100px;">
-                        <img :src="to_watch.image_url" class="w-100" alt="">
+            <div v-if="to_watch" class="modal-body px-4 w-100 flex-column d-flex align-items-center">
+                    <h3 class="w-100 text-center my-2">{{ to_watch.title }}</h3>
+                    <div class="overflow-hidden me-4 w- d-flex justify-content-center" style="height: 30vh;">
+                        <img :src="to_watch.image_url" class="h-100" alt="">
                     </div>
-                    <div>
-                        <h6>{{ to_watch.first_name +' '+ to_watch.last_name }}</h6>
-                        <p class="text-secondary">@{{ to_watch.email }}</p>
-                    </div>
-                </div>
-                <h6><span v-if="to_watch.branch_id">{{ to_watch.branch.name }} </span> {{ to_watch.role.name}}</h6>
+                    <p class="text-justify w-100 my-4">{{ to_watch.content }}</p>
             </div>
             <div v-if="to_edit" class="modal-body d-flex flex-column">
-                <div class="overflow-hidden rounded-circle m-auto my-2" style="width: 100px; height: 100px;">
-                    <img :src="to_edit.image_url" class="w-100" alt="">
+                <input class="mx-auto" type="text" v-model="to_edit.title" placeholder="First Name">
+                <textarea class="mx-auto" rows="8" type="text" v-model="to_edit.content" placeholder="Last Name"></textarea>
+                <div class="w-100 d-flex justify-content-center">
+                    <img v-if="to_edit.image_url" :src="to_edit.image_url" class="w-50" alt="">
                 </div>
-                <div class="m-auto d-flex align-items-center'">
-                     <input class="w-75" id="teamImage" type="file" @change="$event=>imageChanged($event,'edit')">
-                    <label for="teamImage"><i class="uil uil-image-plus me-2"></i>Choose An Image</label>
+                <div class="mx-auto d-flex align-items-center'">
+                     <input class="w-75" id="userImage" type="file" @change="$event=>imageChanged($event,'edit')">
+                    <label for="userImage"><i class="uil uil-image-plus me-2"></i>Choose An Image</label>
                 </div>
-                <input type="email" v-model="to_edit.email" placeholder="Email">
-                <input type="date" v-model="to_edit.birth_day">
-                <select v-model="to_edit.role_id">
-                    <option v-for="role in roles" :key="role.id" :value="role.id">{{ role.name }}</option>
-                </select>
-                <select :value="(to_edit.role_id != 2 && to_edit.role_id != 3) ? '' : to_edit.branch_id" v-model="to_edit.branch_id" :disabled="(to_edit.role_id != 2 && to_edit.role_id != 3)">
-                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }}</option>
-                </select>
-                <input type="text" v-model="to_edit.first_name">
-                <input type="text" v-model="to_edit.last_name">
+            </div>
+            <div v-if="to_watch" class="d-flex justify-content-end my-3 px-3">
+                <button type="button" class="bg-transparent border-0 text-gold mx-2" data-bs-dismiss="modal" @click="cancel">Close</button>
+                <router-link :to="'blogs/' + to_watch.id" class="bg-transparent text-gold border ms-2 py-1 px-2 rounded">More details</router-link>
             </div>
             <div v-if="to_edit || to_delete || to_add" class="d-flex justify-content-end">
                 <button type="button" class="bg-transparent border-0 text-gold mx-2" data-bs-dismiss="modal" @click="cancel">Close</button>
@@ -154,7 +124,7 @@
 </template>
 
 <script>
-import { useUserStore } from '../stores/userStore';
+import { useBlogStore } from '../stores/BlogStore';
 import { useRoleStore } from '../stores/roleStore';
 import { useBranchStore } from '../stores/branchStore';
 import { useAuthStore } from '../stores/authStore';
@@ -166,11 +136,8 @@ export default {
     },
     data(){
         return {
-            usersToDisplay : null,
             search :{
                 params:{
-                    branch:null,
-                    role:null,
                     by_search:''
                 }
             },
@@ -181,11 +148,11 @@ export default {
         }
     },
     created(){
-        useUserStore().fetchUsers(this.search)
+        useBlogStore().fetchBlogs(this.search)
     },
     computed:{
-        users(){
-            return useUserStore().users;
+        blogs(){
+            return useBlogStore().blogs;
         },
         roles(){
             return useRoleStore().roles;
@@ -194,7 +161,7 @@ export default {
             return useBranchStore().branches;
         },
         length(){
-            return useUserStore().users.length
+            return useBlogStore().blogs.length
         },
         auth(){
             return useAuthStore().user
@@ -209,26 +176,20 @@ export default {
             switch(option){
                 case 'add':
                     this.to_add = {
-                        birth_day:'', 
-                        email: '',
-                        first_name: '',
-                        image: '',
-                        last_name: '',
-                        role_id: null,
-                        branch_id: null,
-                        password: '',
-                        password_confirmation: '',
+                        title:'',
+                        content:'',
+                        image:'',
                     }
                     break
                 case 'edit':
-                    this.to_edit = this.users.find(item => item.id === id)
+                    this.to_edit = this.blogs.find(item => item.id === id)
                     break;
                 case 'delete':
                     console.log(id)
-                    this.to_delete = this.users.find(item => item.id === id)
+                    this.to_delete = this.blogs.find(item => item.id === id)
                     break;
                 case 'watch':
-                    this.to_watch = this.users.find(item => item.id === id)
+                    this.to_watch = this.blogs.find(item => item.id === id)
                     break
             }
         },
@@ -257,28 +218,27 @@ export default {
             reader.readAsDataURL(file);
         },
         async update(){
-            this.to_edit._method = 'put'
+            this.to_edit._method = 'patch'
             this.to_edit.image = this.to_edit.image_url
-            await useUserStore().updateUser(this.to_edit);
-            useUserStore().fetchUsers(this.search);
+            await useBlogStore().update(this.to_edit);
+            useBlogStore().fetchBlogs(this.search);
             $('#event').modal('hide');
         },
         async add(){
-            console.log(this.to_add);
-            await useUserStore().createUser(this.to_add);
-            useUserStore().fetchUsers(this.search);
+            await useBlogStore().store(this.to_add);
+            useBlogStore().fetchBlogs(this.search);
             $('#event').modal('hide');
         },
         async destroy(){
-            await useUserStore().deleteUser(this.to_delete.id);
-            useUserStore().fetchUsers(this.search);
+            await useBlogStore().delete(this.to_delete.id);
+            useBlogStore().fetchBlogs(this.search);
             $('#event').modal('hide');
         },
         filter(){
             console.log(this.search)
-            useUserStore().fetchUsers(this.search)
-            this.users = useUserStore().users
-            this.length = useUserStore().users.length
+            useBlogStore().fetchBlogs(this.search)
+            this.blogs = useBlogStore().blogs
+            this.length = useBlogStore().blogs.length
         }
         
     }

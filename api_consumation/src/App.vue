@@ -6,10 +6,19 @@
 <script>
 import api from '@/api';
 import { useUserStore } from './stores/userStore';
+import { useBlogStore } from './stores/blogStore';
 import { useAuthStore } from './stores/authStore';
+import { useGameStore } from './stores/gameStore';
+import { useTournamentStore } from './stores/tournamentStore';
+import { useBranchStore } from './stores/branchStore';
+import { useProductStore } from './stores/productStore';
+import { useCartStore } from './stores/cartStore';
+import { useTeamStore } from './stores/teamStore';
 import { useRouter } from 'vue-router';
 
 import Alert from './components/Alert.vue';
+
+import router from './routes';
 
 export default {
     components:{
@@ -24,7 +33,7 @@ export default {
     async created(){
       await useAuthStore().me();
       if(!useAuthStore().user){
-        useRouter().push('/sign');
+        router.push('/');
       }
     },
     mounted(){
@@ -35,7 +44,49 @@ export default {
         }
       );
       this.$watch(
+        () => useCartStore().message,
+        (newMessage, oldMessage) => {
+          this.fillMessage(newMessage)
+        }
+      );
+      this.$watch(
+        () => useProductStore().message,
+        (newMessage, oldMessage) => {
+          this.fillMessage(newMessage)
+        }
+      );
+      this.$watch(
         () => useAuthStore().message,
+        (newMessage, oldMessage) => {
+          this.fillMessage(newMessage)
+        }
+      );
+      this.$watch(
+        () => useGameStore().message,
+        (newMessage, oldMessage) => {
+          this.fillMessage(newMessage)
+        }
+      );
+      this.$watch(
+        () => useTournamentStore().message,
+        (newMessage, oldMessage) => {
+          this.fillMessage(newMessage)
+        }
+      );
+      this.$watch(
+        () => useBranchStore().message,
+        (newMessage, oldMessage) => {
+          this.fillMessage(newMessage)
+        }
+      );
+      this.$watch(
+        () => useTeamStore().message,
+        (newMessage, oldMessage) => {
+          this.fillMessage(newMessage)
+        }
+      );
+      this.$watch(
+        () => useBlogStore().message,
         (newMessage, oldMessage) => {
           this.fillMessage(newMessage)
         }
@@ -50,7 +101,8 @@ export default {
         this.message = message;
         setTimeout(function(){
           this.message = 'false'
-        },1000)
+          // this.show = false
+        },3000)
       },
     }
 }

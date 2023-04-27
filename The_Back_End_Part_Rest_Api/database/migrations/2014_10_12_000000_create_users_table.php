@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->unsignedBigInteger('role_id')->default(4);
-            $table->unsignedBigInteger('sport_id')->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
             $table->text('image_url')->default('http://localhost:8000/storage/images/userDefaultImage.png');
-            $table->foreign('sport_id')->references('id')->on('sports')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->date('birth_day');
             $table->timestamp('email_verified_at')->nullable();

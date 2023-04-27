@@ -29,9 +29,9 @@ return new class extends Migration
             $table->boolean('played')->default(0);
             $table->boolean('fans')->default(1);
             $table->integer('seats_number')->nullable();
-            $table->integer('seats_available')->nullable();
-            $table->unsignedBigInteger('sport_id');
-            $table->foreign('sport_id')->references('id')->on('sports')->onDelete('cascade');
+            $table->integer('seats_available')->nullable(); 
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->unsignedBigInteger('tournament_id')->nullable();
             $table->foreign('tournament_id')->references('id')->on('tournaments')->onDelete('cascade');
             $table->integer('round')->nullable();

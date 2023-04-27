@@ -47,7 +47,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        $user = User::with('role','sport','permissions')->find(JWTAuth::user()->id);
+        $user = User::with('role','branch','permissions')->find(JWTAuth::user()->id);
         return response()->json($user);
     }
 

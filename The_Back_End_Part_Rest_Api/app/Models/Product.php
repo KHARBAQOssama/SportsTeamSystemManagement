@@ -18,8 +18,8 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function review(){
-        return $this->hasMany(Review::class);
+    public function cart(){
+        return $this->hasOne(Cart::class);
     }
 
     protected $fillable = [
