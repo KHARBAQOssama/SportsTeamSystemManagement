@@ -17,8 +17,11 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $rand = rand(1,4);
         return [
             'first_name' => fake()->firstName(),
+            'role_id' => $rand,
+            'branch_id' => $rand == 2 || $rand == 3 ? rand(1,18) : null,
             'last_name' => fake()->lastName(),
             'birth_day' => fake()->dateTimeBetween('-200 years','-15 years')->format('Y-m-d'),
             'image_url' => 'http://localhost:8000/storage/images/userDefaultImage.png',

@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
+use App\Events\UserCreated;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,11 +16,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionsTableSeeder::class,
             SportSeeder::class,
-            TeamSeeder::class,
+            BranchesTableSeeder::class,
             OurTeamSeeder::class,
             AdminSeeder::class
         ]);
 
-        \App\Models\User::factory(10)->create();
+        
+        User::factory()->times(30)->create()->each(function ($user) {
+            event(new UserCreated($user));
+        });;
     }
 }

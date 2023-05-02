@@ -21,36 +21,6 @@ export default {
     },
     data() {
     return {
-      games: [
-        {
-          home: "../assets/images/chelsealogo.png",
-          away: "../assets/images/bayernlogo.png",
-          time: "13:00",
-          date: "2023-04-04",
-          stadium: "Stadium 1"
-        },
-        {
-          home: "./assets/images/bayernlogo.png",
-          away: "./assets/images/chelsealogo.png",
-          time: "15:30",
-          date: "2023-04-04",
-          stadium: "Stadium 2"
-        },
-        {
-          home: "./assets/images/chelsealogo.png",
-          away: "./assets/images/bayernlogo.png",
-          time: "18:00",
-          date: "2023-04-04",
-          stadium: "Stadium 3"
-        },
-        {
-          home: "./assets/images/bayernlogo.png",
-          away: "./assets/images/chelsealogo.png",
-          time: "18:00",
-          date: "2023-04-04",
-          stadium: "Stadium 3"
-        }
-      ],
       currentGame: null,
       currentIndex: -1
     };

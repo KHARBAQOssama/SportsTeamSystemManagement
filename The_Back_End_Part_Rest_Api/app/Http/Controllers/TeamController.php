@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class TeamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
         return response()->json(Team::all());
@@ -87,12 +89,6 @@ class TeamController extends Controller
             'stadium'   => $request->filled('stadium') ? $request->input('stadium') : $team->stadium,
         ];
 
-        // if($request->file('image') && $team->image_url != $request->file('image_url')){
-        //     $path                       = $request->file('image')->store('public/images');
-        //     $url                        = Storage::url($path);
-        //     $credentials['image_url']   = $url;
-        // }
-
         if ($request->input('image')) {
             $base64_string = $request->input('image');
             $image_data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64_string));
@@ -111,9 +107,6 @@ class TeamController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Team $team)
     {
         $team->delete();

@@ -2,7 +2,7 @@
     <div class="w-100 row bg-black">
       <h3 class="text-gold my-3 mb-5 col-12 text-center"><ion-icon name="albums-outline" class="text-gold fs-4 me-2 nav-icon"></ion-icon> Blogs</h3>
       <div class="col-12 row justify-content-around px-3 mx-auto">
-            <div v-for="(blog,index) in blogs" :key="blog.id"  :class="index/2 == 0 ?'me-auto col-md-8 col-12 p-2 bg-gold text-whited-flex-flex-column my-2' : 'ms-auto col-md-8 col-12 p-2 bg-gold text-whited-flex-flex-column my-2'">
+            <div v-for="(blog,index) in blogs" :key="blog.id"  :class="index%2 == 0 ?'me-auto col-md-8 col-12 p-2 bg-gold text-whited-flex-flex-column my-2' : 'ms-auto col-md-8 col-12 p-2 bg-gold text-whited-flex-flex-column my-2'">
                 <div class="m-auto col-11 overflow-hidden justify-content-center d-flex flex-column align-items-center" style="height:200px;">
                     <img :src="blog.image_url" class="w-100 m-auto" alt="">
                 </div>

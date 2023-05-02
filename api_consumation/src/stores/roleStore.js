@@ -12,6 +12,12 @@ export const useRoleStore = defineStore('role', {
             .then((response) => {
                 this.roles = response.data
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },

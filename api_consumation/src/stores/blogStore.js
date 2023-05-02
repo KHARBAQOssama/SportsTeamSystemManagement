@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import api from '@/api'
 
+import router from '../routes';
+
 export const useBlogStore = defineStore('blog', {
   state: () => ({
     blogs: [],
@@ -14,6 +16,12 @@ export const useBlogStore = defineStore('blog', {
               console.log(result.data)
                 this.blogs = result.data
             }).catch((err) => {
+              if(err.response.status == 404){
+                router.push('/404');
+              }
+              if(err.response.status == 403){
+                router.push('/403');
+              }
                 console.log(err);
             });
     },
@@ -21,9 +29,17 @@ export const useBlogStore = defineStore('blog', {
         return await api.get('/blog/'+id)
             .then((result) => {
                 console.log(result.data)
+                if(!result.data.title){
+                  router.push('/404');
+                }
                 return result.data
             }).catch((err) => {
-                console.log(err);
+                if(err.response.status == 404){
+                  router.push('/404');
+                }
+                if(err.response.status == 403){
+                  router.push('/403');
+                }
             });
     },
     async store(data) {
@@ -32,16 +48,38 @@ export const useBlogStore = defineStore('blog', {
             console.log(response.data)
             this.message = response.data.message;
         }).catch((err) => {
-            console.log(err);
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
         });
     },
     async storeComment(data) {
         await api.post('/comment',data)
         .then((response) => {
             console.log(response.data)
-            this.message = response.data.message;
         }).catch((err) => {
-            console.log(err);
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
+        });
+    },
+    async deleteComment(id) {
+        await api.delete('/comment/'+id)
+        .then((response) => {
+            console.log(response.data)
+        }).catch((err) => {
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
         });
     },
     async delete(blog) {
@@ -49,7 +87,14 @@ export const useBlogStore = defineStore('blog', {
         this.message = response.data.message
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((err)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(err)})
     },
     
     async update(blog) {
@@ -59,7 +104,15 @@ export const useBlogStore = defineStore('blog', {
         this.message = response.data.message
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((err)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(err)
+      })
     },
   }
 })

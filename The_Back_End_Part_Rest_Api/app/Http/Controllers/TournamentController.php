@@ -15,9 +15,14 @@ use App\Models\Standing;
 
 class TournamentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index']]);
+        $this->middleware('permission:Add Tournament',['only'=>'update']);
+        $this->middleware('permission:Delete Tournament',['only'=>'destroy']);
+        $this->middleware('permission:Update Tournament',['only'=>'store']);
+    }
+    
     public function index(Request $request)
     {   
         $query = Tournament::query();

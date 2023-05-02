@@ -13,9 +13,11 @@ use App\Models\Tournament;
 
 class GameController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index','nextGame']]);
+    }
+
     public function index()
     {
         $tournaments = Tournament::all();
@@ -23,7 +25,8 @@ class GameController extends Controller
             TournamentController::tournamentStandings($tournament); 
         }
         $ourTeam = Team::ourTeam();
-        $played = Game::with(['homeTeam', 'awayTeam','tournament','branch'])->where('played',1)
+        $played = Game::with(['homeTeam', 'awayTeam','tournament','branch'])
+                ->where('played',1)
                 ->where(function($query) use ($ourTeam){
                     $query->orWhere('home', $ourTeam->id)
                         ->orWhere('away', $ourTeam->id);

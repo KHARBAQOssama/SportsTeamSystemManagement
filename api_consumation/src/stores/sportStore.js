@@ -13,6 +13,12 @@ export const useSportStore = defineStore('sport', {
                 console.log(response.data)
                 this.sports = response.data
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },

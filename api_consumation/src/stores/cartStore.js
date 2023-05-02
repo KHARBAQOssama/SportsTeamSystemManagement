@@ -13,6 +13,12 @@ export const useCartStore = defineStore('cart', {
               console.log(result.data)
                 this.carts = result.data
             }).catch((err) => {
+              if(err.response.status == 404){
+                router.push('/404');
+              }
+              if(err.response.status == 403){
+                router.push('/403');
+              }
                 console.log(err);
             });
     },
@@ -22,6 +28,12 @@ export const useCartStore = defineStore('cart', {
             console.log(response.data)
             this.message = response.data.message;
         }).catch((err) => {
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
             console.log(err);
         });
     },
@@ -30,7 +42,14 @@ export const useCartStore = defineStore('cart', {
         this.message = response.data.message
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(error)})
     },
   }
 })

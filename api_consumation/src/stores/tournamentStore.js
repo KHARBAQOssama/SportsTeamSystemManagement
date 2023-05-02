@@ -22,6 +22,12 @@ export const useTournamentStore = defineStore('tournament', {
               console.log(result.data)
                 this.tournaments = result.data
             }).catch((err) => {
+              if(err.response.status == 404){
+                router.push('/404');
+              }
+              if(err.response.status == 403){
+                router.push('/403');
+              }
                 console.log(err);
             });
     },
@@ -31,6 +37,12 @@ export const useTournamentStore = defineStore('tournament', {
               console.log(result.data)
                 this.standing = result.data
             }).catch((err) => {
+              if(err.response.status == 404){
+                router.push('/404');
+              }
+              if(err.response.status == 403){
+                router.push('/403');
+              }
                 console.log(err);
             });
     },
@@ -40,6 +52,12 @@ export const useTournamentStore = defineStore('tournament', {
             console.log(response.data)
             this.message = response.data.message;
         }).catch((err) => {
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
             console.log(err);
         });
     },
@@ -48,7 +66,14 @@ export const useTournamentStore = defineStore('tournament', {
         this.message = response.data.message
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(error)})
     },
     
     async updateTournament(tournament) {
@@ -58,7 +83,14 @@ export const useTournamentStore = defineStore('tournament', {
         this.message = response.data.message
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(error)})
     },
   }
 })

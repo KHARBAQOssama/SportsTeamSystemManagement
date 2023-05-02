@@ -10,9 +10,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
         $carts = Cart::with('product.images')->where('user_id',JWTAuth::user()->id)->get();

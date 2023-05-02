@@ -6,7 +6,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Events\UserCreated;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
@@ -17,8 +16,12 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth:api', ['except' => ['store']]);
-        // $this->middleware('permission:add user');
+        $this->middleware('auth:api', ['except' => ['store']]);
+        $this->middleware('permission:Create User',['only'=>['storeByAdmin']]);
+        $this->middleware('permission:View Users',['only'=>'index']);
+        $this->middleware('permission:Update User',['only'=>'update']);
+        $this->middleware('permission:Delete User',['only'=>'destroy']);
+        $this->middleware('permission:Update Profile',['only'=>'updateSelf']);
     }
 
     public function index(Request $request)
@@ -75,16 +78,20 @@ class UserController extends Controller
 
         if(!$user){
             return response()->json([
-                'error'=> 'Something went wrong'
+                'message'=> 'Something went wrong'
             ]);
         }
 
+        $user = User::with('role.permissions', 'permissions')->find($user->id);
+
         event(new UserCreated($user));
 
-        return response()->json([
-            'message' => 'Account has been created successfully',
-            'user' => $user,
-        ],201);
+        return response()->json(
+            [
+                'message' => 'Account has been created successfully',
+                'user' => $user,
+            ],201
+        );
     }
 
     public function storeByAdmin(StoreUserRequest $request){
@@ -127,7 +134,7 @@ class UserController extends Controller
 
         if(!$user){
             return response()->json([
-                'error'=> 'Something went wrong'
+                'message'=> 'Something went wrong'
             ]);
         }
 

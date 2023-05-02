@@ -1,5 +1,5 @@
 <template>
-    <button class="text-center px-2 position-fixed end-0 me-5 mb-5 bottom-0 z-3">
+    <button class="text-center px-2 position-fixed end-0 me-5 mb-5 bottom-0 z-3 border-2 border-white">
         <router-link to="/sign" class="fs-5">Join Us</router-link>
     </button>
 </template>

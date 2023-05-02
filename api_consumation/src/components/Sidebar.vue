@@ -8,15 +8,15 @@
                 </div>
             </div>
             <div class="w-100">
-                <router-link to="/sign" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link to="/dashboard" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="home-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Dashboard</span>
                 </router-link>
-                <router-link to="/dashboard/users" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link v-if="heCan('View Users')" to="/dashboard/users" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="people-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Users</span>
                 </router-link>
-                <router-link to="/dashboard/branches" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link v-if="heCan('View Branches')" to="/dashboard/branches" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="football-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Branches</span>
                 </router-link>
@@ -24,19 +24,19 @@
                     <ion-icon name="flash-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Games</span>
                 </router-link>
-                <router-link to="/dashboard/tournaments" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link v-if="heCan('Delete Tournaments') || heCan('Add Tournament') || heCan('Update Tournament')" to="/dashboard/tournaments" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="trophy-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Tournaments</span>
                 </router-link>
-                <router-link to="/dashboard/blogs" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link v-if="heCan('Delete Blog')" to="/dashboard/blogs" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="albums-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Blogs</span>
                 </router-link>
-                <router-link to="/dashboard/products" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link v-if="heCan('Add Product')" to="/dashboard/products" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="pricetags-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Products</span>
                 </router-link>
-                <router-link to="/dashboard/profile" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
+                <router-link v-if="heCan('Update Profile')" to="/dashboard/profile" class="ps-5 py-2 nav-item my-1 overflow-hidden d-flex position-relative">
                     <ion-icon name="person-outline" class="text-gold fs-4 me-2 position-absolute left-- nav-icon"></ion-icon>
                     <span class="ms-1 text-gold">Profile</span>
                 </router-link>
@@ -53,6 +53,7 @@
 
 <script>
 import { useAuthStore } from '../stores/authStore';
+import { can } from '../middlewares/can'
 import router from '../routes';
 
 export default {
@@ -70,6 +71,9 @@ export default {
         async logOut(){
             await useAuthStore().logOut();
             router.push('/')
+        },
+        heCan(permission){
+            return can(permission)
         }
     }
 

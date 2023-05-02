@@ -21,6 +21,9 @@
                             <p class="fs-small fw-semibold">{{comment.publisher.first_name}} {{comment.publisher.last_name}}<br>
                             <span class="fs-smaller fw-light">{{comment.created_at.substring(0,16)}}</span></p>
                         </div>
+                        <div class="d-flex justify-content-end ms-auto pe-1" v-if="user.id == comment.publisher.id">
+                            <button v-if="true" class="bg-transparent border-0" @click="deleteComment(comment.id)"><i class="uil uil-trash"></i></button>
+                        </div>
                     </div>
                     <p class="w-100 ps-4 pe-1 text-justify fs-small">
                         {{comment.content}} 
@@ -38,17 +41,20 @@
         Not Found
     </div>
     <div class="m-auto" v-else>
-            <Loading></Loading>
+        <Loading></Loading>
     </div>
   </div>
 </template>
 
 <script>
 import { useBlogStore } from '../stores/blogStore';
+
+import { useAuthStore } from '../stores/authStore';
 import Loading from './Loading.vue';
+
 export default {
     components:{
-        Loading
+        Loading,
     },
     data() {
         return {
@@ -62,6 +68,9 @@ export default {
     computed:{
         comments(){
             return this.blog.comments.reverse()        
+        },
+        user(){
+            return useAuthStore().user
         }
     },
     created() {
@@ -78,6 +87,12 @@ export default {
                 this.blog = blog;
             });
             this.comment.content=''
+        },
+        async deleteComment(id){
+             await useBlogStore().deleteComment(id);
+             useBlogStore().getBlog(this.$route.params.id).then((blog) => {
+                this.blog = blog;
+            });
         }
     }
 }

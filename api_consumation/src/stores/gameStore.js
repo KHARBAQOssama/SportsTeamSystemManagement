@@ -19,6 +19,12 @@ export const useGameStore = defineStore('game', {
                 this.games = toRaw(response.data);
                 console.log(this.games)
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },
@@ -28,6 +34,12 @@ export const useGameStore = defineStore('game', {
                 console.log(response.data);
                 this.message = response.data.message
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },
@@ -37,6 +49,12 @@ export const useGameStore = defineStore('game', {
                 this.nextGame = toRaw(response.data);
                 console.log(this.nextGame);
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },
@@ -47,6 +65,12 @@ export const useGameStore = defineStore('game', {
                 console.log(response)
                 this.message = response.data.message
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },

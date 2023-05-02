@@ -5,7 +5,7 @@
                 <input class="w-100 mx-auto m-1 px-3 p-1" type="text" v-model="search.params.by_search" placeholder="Search A Blog" @keyup="filter()">
             </div>
         </div>
-        <div class="add my-2 d_flex">
+        <div class="add my-2 d_flex" v-if="heCan('Add Blog')">
             <button class="text-gold bg-black rounded-3 border-0 py-2 d-flex justify-content-center align-items-center ms-auto px-3" data-bs-toggle="modal" data-bs-target="#event" @click="to('add')"><ion-icon name="person-add" class="text-gold me-2"></ion-icon> Add User</button>
         </div>
         <div class="w-100 overflow-x-scroll d-flex flex-column table rounded-3 text-center">
@@ -55,8 +55,8 @@
                         </div>
                         <div class="h-100 d-flex justify-content-around align-items-center events">
                             <button class="border-0 bg-transparent rounded-1 p-1 px-2 watch" data-bs-toggle="modal" data-bs-target="#event" @click="to('watch',blog.id)"><i class="uil text-success uil-eye"></i></button>
-                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',blog.id)"><i class="uil text-warning uil-pen"></i></button>
-                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',blog.id)"><i class="uil text-danger uil-trash"></i></button>
+                            <button v-if="heCan('Update Blog')" class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',blog.id)"><i class="uil text-warning uil-pen"></i></button>
+                            <button v-if="heCan('Delete Blog')" class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',blog.id)"><i class="uil text-danger uil-trash"></i></button>
                         </div>
                     </div>
                 </div>
@@ -128,6 +128,8 @@ import { useBlogStore } from '../stores/BlogStore';
 import { useRoleStore } from '../stores/roleStore';
 import { useBranchStore } from '../stores/branchStore';
 import { useAuthStore } from '../stores/authStore';
+
+import { can } from '../middlewares/can'
 import Loading from '../components/Loading.vue'
 
 export default {
@@ -239,6 +241,9 @@ export default {
             useBlogStore().fetchBlogs(this.search)
             this.blogs = useBlogStore().blogs
             this.length = useBlogStore().blogs.length
+        },
+        heCan(permission){
+            return can(permission)
         }
         
     }

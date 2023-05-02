@@ -7,7 +7,7 @@
                     <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }}</option>
                 </select>
         </div>
-        <div class="add my-2 d_flex">
+        <div class="add my-2 d_flex" v-if="heCan('Add Tournament')">
             <button class="text-gold bg-black rounded-3 border-0 py-2 d-flex justify-content-center align-items-center ms-auto px-3"><ion-icon name="trophy" class="text-gold me-2"></ion-icon><router-link to="/dashboard/tournaments/add">Add Tournament</router-link></button>
         </div>
          <div class="w-100 overflow-x-scroll d-flex flex-column table rounded-3 text-center">
@@ -51,8 +51,8 @@
                         </div>
                         <div class="h-100 d-flex justify-content-around align-items-center events">
                             <button class="border-0 bg-transparent rounded-1 p-1 px-2 watch" data-bs-toggle="modal" data-bs-target="#event" @click="to('watch',tournament.id)"><i class="uil text-success uil-eye"></i></button>
-                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',tournament.id)"><i class="uil text-warning uil-pen"></i></button>
-                            <button class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',tournament.id)"><i class="uil text-danger uil-trash"></i></button>
+                            <button v-if="heCan('Update Tournament')" class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',tournament.id)"><i class="uil text-warning uil-pen"></i></button>
+                            <button v-if="heCan('Delete Tournaments')" class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',tournament.id)"><i class="uil text-danger uil-trash"></i></button>
                             <button class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="viewStanding(tournament.id)"><i class="uil text-danger uil-list-ol"></i></button>
                         </div>
                     </div> 
@@ -143,6 +143,8 @@ import { useBranchStore } from '../stores/branchStore';
 import { useAuthStore } from '../stores/authStore';
 import { useTournamentStore } from '../stores/tournamentStore';
 import AddTournament from '../components/tournament/AddTournamentForm.vue';
+
+import { can } from '../middlewares/can'
 
 export default {
     components:{
@@ -243,6 +245,9 @@ export default {
         async viewStanding(id){
             await useTournamentStore().viewStanding(id);
             this.view_st = true
+        },
+        heCan(permission){
+            return can(permission)
         }
         
     }

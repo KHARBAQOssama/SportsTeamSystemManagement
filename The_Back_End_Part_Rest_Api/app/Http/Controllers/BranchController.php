@@ -11,9 +11,16 @@ use App\Models\Tournament;
 
 class BranchController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+        
+        $this->middleware('permission:Add Branch',['only'=>'update']);
+        $this->middleware('permission:Delete Branch',['only'=>'destroy']);
+        $this->middleware('permission:Update Branch',['only'=>'store']);
+        $this->middleware('permission:View Branches',['only'=>'index']);
+    }
+
     public function index()
     {
         $branches = Branch::with('users','tournaments','games')->get();
@@ -93,14 +100,5 @@ class BranchController extends Controller
         return response()->json([
             'message' => 'Branch deleted successfully'
         ]);
-    }
-
-    public function getBranchUsers(Branch $branch){
-        return response()->json($branch->users);
-    }
-
-    public function authenticatedBranchUsers(){
-        $users = JWTAuth::user()->Branch->users;
-        return response()->json($users);
     }
 }

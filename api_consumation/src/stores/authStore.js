@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import api from '@/api'
-import { eventBus } from '../eventBus';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -17,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
           console.log(response.data);
           const { access_token } = response.data;
           localStorage.setItem('token', access_token);
-          
+          console.log('added');
         }
         await this.me();
     },
@@ -25,9 +24,18 @@ export const useAuthStore = defineStore('auth', {
         return await api.post('/auth/me')
         .then((response) => {
             this.user = response.data
+            localStorage.setItem('currentUser', JSON.stringify(response.data));
+            console.log('added Us');
             return response.data
         }).catch((err) => {
+          
             this.user = null;
+            if(err.response.status == 404){
+              router.push('/404');
+            }
+            if(err.response.status == 403){
+              router.push('/403');
+            }
             return false
         });
     },
@@ -45,6 +53,7 @@ export const useAuthStore = defineStore('auth', {
         if (response) {
           console.log(response.data);
           localStorage.removeItem('token');
+          localStorage.removeItem('currentUser');
         }
     },
     async resetPassword(data) {
@@ -53,6 +62,12 @@ export const useAuthStore = defineStore('auth', {
             this.message = response.data.message 
             console.log(response)
         }).catch((err) => {
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
             console.log(err);
         });
     },
@@ -62,6 +77,12 @@ export const useAuthStore = defineStore('auth', {
             console.log(response);
             return response.status
         }).catch((err) => {
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
             console.log(err);
         });
     },
@@ -70,8 +91,14 @@ export const useAuthStore = defineStore('auth', {
           const response = await promise;
           return response;
         } catch (err) {
-          console.log(err);
-          this.message = err.response?.data?.message || 'Something went wrong';
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
+          // console.log(err);
+          // this.message = err.response?.data?.message || 'Something went wrong';
         }
     }
   }

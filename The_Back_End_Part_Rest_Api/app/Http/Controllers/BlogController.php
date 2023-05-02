@@ -10,9 +10,15 @@ use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index']]);
+        $this->middleware('permission:Add Blog',['only'=>['store']]);
+        $this->middleware('permission:Update Blog',['only'=>'update']);
+        $this->middleware('permission:Delete Blog',['only'=>'destroy']);
+    }
+
     public function index(Request $request)
     {
         $query = Blog::query();

@@ -8,9 +8,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['index']]);
+    }
+    
     public function index()
     {
         return response()->json(Comment::all());
@@ -33,7 +35,7 @@ class CommentController extends Controller
 
         $comment = Comment::create($credentials);
 
-        return response()->json(['message' => 'comment has been added successfully']);
+        return response()->json(['success' => 'comment has been added successfully']);
     }
 
     /**
@@ -45,30 +47,12 @@ class CommentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Comment $comment)
-    {
-        $request->validate([
-            'content'=>'required'
-        ]);
-
-        $credentials = [
-            'content' => $request->input('content'),
-        ];
-
-        $comment->update($credentials);
-
-        return response()->json(['success' => 'comment has been updated successfully']);
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Comment $comment)
     {
         $comment->delete();
 
-        return response()->json(['success' => 'comment has been deleted successfully']);
+        return response()->json(['message' => 'comment has been deleted successfully']);
     }
 }

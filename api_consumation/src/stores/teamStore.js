@@ -15,6 +15,12 @@ export const useTeamStore = defineStore('team', {
                 // return toRaw(response.data) ;
                 localStorage.setItem('myTeams',JSON.stringify(this.teams))
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },
@@ -23,6 +29,12 @@ export const useTeamStore = defineStore('team', {
             .then((response) => {
                 this.teamAdded = toRaw(response.data.team)
             }).catch((err) => {
+                if(err.response.status == 404){
+                    router.push('/404');
+                  }
+                  if(err.response.status == 403){
+                    router.push('/403');
+                  }
                 console.log(err);
             });
         },

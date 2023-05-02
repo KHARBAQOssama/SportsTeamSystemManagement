@@ -7,20 +7,17 @@
       </button>
       <div class="collapse navbar-collapse px-4 pe-5 bg-black mt-3" id="navbarTogglerDemo01">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item mx-3" v-if="user && user.role_id == 1">
+          <li class="nav-item mx-3" v-if="user && (user.role_id == 1 || user.role_id == 2)">
             <router-link class="nav-link" to="/dashboard">Dashboard</router-link>
+          </li>
+          <li class="nav-item mx-3">
+            <router-link class="nav-link" to="/">Home</router-link>
           </li>
           <li class="nav-item mx-3">
             <router-link class="nav-link" to="/store">Store</router-link>
           </li>
-          <li class="nav-item mx-3">
-            <router-link class="nav-link" to="#">Contact Us</router-link>
-          </li>
-          <li class="nav-item mx-3">
-            <router-link class="nav-link" to="#">About</router-link>
-          </li>
           <li class="nav-item mx-3" v-if="user">
-            <router-link class="nav-link" to="/"  @click="logOut">Log Out</router-link>
+            <router-link class="nav-link" to="#"  @click="logOut">Log Out</router-link>
           </li>
         </ul>
       </div>
@@ -45,7 +42,7 @@ export default {
   methods:{
     async logOut(){
       await useAuthStore().logOut();
-      router.push('/')
+      location.reload();
     }
   }
 }

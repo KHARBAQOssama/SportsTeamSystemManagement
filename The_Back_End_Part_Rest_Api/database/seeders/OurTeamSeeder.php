@@ -19,7 +19,7 @@ class OurTeamSeeder extends Seeder
             'city' => 'YOUSSOUFIA',
             'country' => 'MOROCCO',
             'stadium' => 'DAKHLA STADIUM',
-            'image_url' => 'http://localhost:8000/storage/images/ourteam-logo.png'
+            'image_url' => 'http://localhost:8000/storage/images/logo.png'
         ];
 
         DB::table('teams')->insert($credentials);

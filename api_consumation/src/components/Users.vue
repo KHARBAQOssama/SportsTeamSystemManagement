@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="add my-2 d_flex">
-            <button class="text-gold bg-black rounded-3 border-0 py-2 d-flex justify-content-center align-items-center ms-auto px-3" data-bs-toggle="modal" data-bs-target="#event" @click="to('add')"><ion-icon name="person-add" class="text-gold me-2"></ion-icon> Add User</button>
+            <button class="text-gold bg-black rounded-3 border-0 py-2 d-flex justify-content-center align-items-center ms-auto px-3" data-bs-toggle="modal" data-bs-target="#event" v-if="heCan('Create User')" @click="to('add')"><ion-icon name="person-add" class="text-gold me-2"></ion-icon> Add User</button>
         </div>
         <div class="w-100 overflow-x-scroll d-flex flex-column table rounded-3 text-center">
             <div class="h-100 under-table overflow-y-scroll position-relative">
@@ -66,8 +66,9 @@
                         </div>
                         <div :class=" auth.id == user.id ? 'h-100 d-flex justify-content-around align-items-center events opacity-0' : 'h-100 d-flex justify-content-around align-items-center events'">
                             <button :disabled=" auth.id == user.id" class="border-0 bg-transparent rounded-1 p-1 px-2 watch" data-bs-toggle="modal" data-bs-target="#event" @click="to('watch',user.id)"><i class="uil text-success uil-eye"></i></button>
-                            <button :disabled=" auth.id == user.id" class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',user.id)"><i class="uil text-warning uil-pen"></i></button>
-                            <button :disabled=" auth.id == user.id" class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',user.id)"><i class="uil text-danger uil-trash"></i></button>
+                            <button :disabled=" auth.id == user.id" v-if="heCan('Assign Permissions')" class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('perm',user.id)"><i class="uil text-success uil-lock-open-alt"></i></button>
+                            <button :disabled=" auth.id == user.id" v-if="heCan('Update User')" class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',user.id)"><i class="uil text-warning uil-pen"></i></button>
+                            <button :disabled=" auth.id == user.id" v-if="heCan('Delete User')" class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',user.id)"><i class="uil text-danger uil-trash"></i></button>
                         </div>
                     </div>
                 </div>
@@ -84,6 +85,7 @@
                 <h4 v-if="to_delete" class="" >Delete User</h4>
                 <h4 v-if="to_edit" class="" >Edit User</h4>
                 <h4 v-if="to_add" class="" >Add User</h4>
+                <h4 v-if="perm" class="" >User Permissions</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cancel()"></button>
             </div>
             <div v-if="to_delete" class="modal-body text-center">
@@ -141,11 +143,18 @@
                 <input type="text" v-model="to_edit.first_name">
                 <input type="text" v-model="to_edit.last_name">
             </div>
-            <div v-if="to_edit || to_delete || to_add" class="d-flex justify-content-end">
+            <div v-if="perm" class="modal-body d-flex flex-wrap">
+                <div v-for="permission in permissions" :key="permission.id" class="w-50 px-4 d-flex justify-content-start align-items-center">
+                    <input type="checkbox" name="permission" :id="'permission'+permission.id" class="me-3 ms-0 w-25" v-model="permission.checked">
+                    <label :for="'permission'+permission.id">{{ permission.name }}</label>
+                </div>
+            </div>
+            <div v-if="to_edit || to_delete || to_add || perm" class="d-flex justify-content-end">
                 <button type="button" class="bg-transparent border-0 text-gold mx-2" data-bs-dismiss="modal" @click="cancel">Close</button>
                 <button v-if="to_delete" type="button" class="brand-gold-button mx-3" @click="destroy">Delete</button>
                 <button v-if="to_edit" type="button" class="brand-gold-button mx-3" @click="update">Update</button>
                 <button v-if="to_add" type="button" class="brand-gold-button mx-3" @click="add">Add</button>
+                <button v-if="perm" type="button" class="brand-gold-button mx-3" @click="savePermissions">Save</button>
             </div>
             </div>
         </div>
@@ -158,7 +167,9 @@ import { useUserStore } from '../stores/userStore';
 import { useRoleStore } from '../stores/roleStore';
 import { useBranchStore } from '../stores/branchStore';
 import { useAuthStore } from '../stores/authStore';
+import { can } from '../middlewares/can'
 import Loading from '../components/Loading.vue'
+
 
 export default {
     components:{
@@ -178,10 +189,12 @@ export default {
             to_watch: null,
             to_edit: null,
             to_add: null,
+            perm: null,
         }
     },
     created(){
         useUserStore().fetchUsers(this.search)
+        useUserStore().fetchPermissions()
     },
     computed:{
         users(){
@@ -192,6 +205,19 @@ export default {
         },
         branches(){
             return useBranchStore().branches;
+        },
+        permissions(){
+            let permissions = [];
+            useUserStore().permissions.forEach(permission => {
+                let object = {
+                    id:permission.id,
+                    name:permission.name,
+                    checked:this.perm?.permissions.some(obj =>obj.id === permission.id),
+                }
+                permissions.push(object)
+            });
+            console.log(permissions)
+            return permissions
         },
         length(){
             return useUserStore().users.length
@@ -206,6 +232,7 @@ export default {
             this.to_edit = null
             this.to_watch = null
             this.to_add = null
+            this.perm = null
             switch(option){
                 case 'add':
                     this.to_add = {
@@ -222,6 +249,11 @@ export default {
                     break
                 case 'edit':
                     this.to_edit = this.users.find(item => item.id === id)
+                    break;
+                case 'perm':
+                    this.perm = this.users.find(item => item.id === id)
+                    console.log(this.perm.permissions[0]);
+                    console.log(this.permissions[0]);
                     break;
                 case 'delete':
                     console.log(id)
@@ -279,6 +311,20 @@ export default {
             useUserStore().fetchUsers(this.search)
             this.users = useUserStore().users
             this.length = useUserStore().users.length
+        },
+        heCan(permission){
+            return can(permission)
+        },
+        savePermissions(){
+
+            let permissionT = this.permissions.filter(per => per.checked == true);
+            let permissions = [];
+            permissionT.forEach(perm => {
+                permissions.push(perm.id);
+            });
+            console.log(permissions);
+            useUserStore().assignPermissions(this.perm.id,{ids:permissions});
+            $('#event').modal('hide');
         }
         
     }

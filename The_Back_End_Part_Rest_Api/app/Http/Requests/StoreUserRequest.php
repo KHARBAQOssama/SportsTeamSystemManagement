@@ -29,13 +29,12 @@ class StoreUserRequest extends FormRequest
             'birth_day'     => 'required|date|before:' . date('Y-m-d', strtotime('-15 years')),
             'password'      => 'required|string|min:8|confirmed',
             'image_url'     => 'nullable|url',
-            'branch_id'      => 'required|integer'
         ];
         $admin = Role::where('name','admin')->first()->id;
         $fan = Role::where('name','fan')->first()->id;
         if(request('role_id')){
             if(request('role_id') == $admin || request('role_id') == $fan){
-                $rules['sport_id'] = '';
+                $rules['branch_id'] = '';
             }
         }
         return $rules;

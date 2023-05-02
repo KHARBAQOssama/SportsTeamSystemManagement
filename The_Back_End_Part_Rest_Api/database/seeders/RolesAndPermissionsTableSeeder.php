@@ -22,16 +22,32 @@ class RolesAndPermissionsTableSeeder extends Seeder
 
         // Create permissions
         $permissions = [
-            'create',
-            'read',
-            'update',
-            'delete',
-            'view',
-            'edit',
-            'approve',
-            'publish',
-            'comment',
-            'like',
+            'Create User',
+            'View Users',
+            'Update User',
+            'Delete User',
+            'Update Profile',
+            'Add Blog',
+            'Update Blog',
+            'Delete Blog',
+            'View Blogs',
+            'Add Product',
+            'Update Product',
+            'Delete Product',
+            'view Products',
+            'Add Tournament',
+            'Update Tournament',
+            'Delete Tournaments',
+            'View Tournaments',
+            'Add Branch',
+            'View Branches',
+            'Update Branch',
+            'Delete Branch',
+            'Assign Permissions',
+            'Delete Comment',
+            'Add Comment',
+            'Add To Cart',
+            'Remove From Cart',
         ];
 
         foreach ($permissions as $permission) {
@@ -41,38 +57,86 @@ class RolesAndPermissionsTableSeeder extends Seeder
         // Assign permissions to each role
 
         $adminPermissionsIds = Permission::whereIn('name', [
-            'create',
-            'read',
-            'approve',
-            'delete',
-            'subadmin',
+            'Create User',
+            'View Users',
+            'Update User',
+            'Delete User',
+            'Update Profile',
+            'Add Blog',
+            'Update Blog',
+            'Delete Blog',
+            'View Blogs',
+            'Add Product',
+            'Update Product',
+            'Delete Product',
+            'view Products',
+            'Update Tournament',
+            'Delete Tournaments',
+            'View Tournaments',
+            'Add Branch',
+            'View Branches',
+            'Update Branch',
+            'Delete Branch',
+            'Assign Permissions',
+            'Delete Comment',
+            'Add Comment',
+            'Add To Cart',
+            'Remove From Cart',
         ])->pluck('id');
 
         $admin->permissions()->sync($adminPermissionsIds);
 
         // For sub-admin role
         $subAdminPermissionIds = Permission::whereIn('name', [
-            'create',
-            'read',
-            'update',
-            'delete',
-            'view',
-            'edit',
+            'Create User',
+            'View Users',
+            'Update User',
+            'Delete User',
+            'Update Profile',
+            'Add Blog',
+            'Update Blog',
+            'Delete Blog',
+            'View Blogs',
+            'Add Product',
+            'Update Product',
+            'Delete Product',
+            'view Products',
+            'Add Tournament',
+            'Update Tournament',
+            'Delete Tournaments',
+            'View Tournaments',
+            'Delete Comment',
+            'Add Comment',
+            'Add To Cart',
+            'Remove From Cart',
         ])->pluck('id');
 
         $subAdmin->permissions()->sync($subAdminPermissionIds);
 
         // For team-member role
         $teamMemberPermissionIds = Permission::whereIn('name', [
-            'publish',
+            'Update Profile',
+            'View Blogs',
+            'view Products',
+            'View Tournaments',
+            'Delete Comment',
+            'Add Comment',
+            'Add To Cart',
+            'Remove From Cart',
         ])->pluck('id');
 
         $teamMember->permissions()->sync($teamMemberPermissionIds);
 
         // For fan role
         $fanPermissionIds = Permission::whereIn('name', [
-            'comment',
-            'like',
+            'Update Profile',
+            'View Blogs',
+            'view Products',
+            'View Tournaments',
+            'Delete Comment',
+            'Add Comment',
+            'Add To Cart',
+            'Remove From Cart',
         ])->pluck('id');
 
         $fan->permissions()->sync($fanPermissionIds);

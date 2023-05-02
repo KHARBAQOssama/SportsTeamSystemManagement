@@ -6,7 +6,7 @@
                 <input type="number" class="col-md-3 col-5 mx-auto" v-model="search.params.max_price" placeholder="Min Price" @input="filter" @change="filter" name="" id="">
                 <input type="number" class="col-md-3 col-5 mx-auto" v-model="search.params.min_price" placeholder="Max Price" @input="filter" @change="filter" name="" id="">
         </div>
-        <div class="add my-2 d_flex">
+        <div class="add my-2 d_flex" v-if="heCan('Add Product')">
             <button class="text-gold bg-black rounded-3 border-0 py-2 d-flex justify-content-center align-items-center ms-auto px-3" data-bs-toggle="modal" data-bs-target="#event" @click="to('add')"><ion-icon name="trophy" class="text-gold me-2"></ion-icon>Add Product</button>
         </div>
         <div v-for="product in products" class="row col-md-9 col-10 rounded-1 bg-cold rounded-3 shadow align-items-center my-2" :key="product.id">
@@ -24,8 +24,8 @@
                 <div><span class="fw-bold">{{ product.quantity }}</span> Piece</div>
                 <div class="w-100">
                     <div class="d-flex justify-content-around align-items-center py-2 w-50">
-                        <button class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',product.id)"><i class="uil text-warning uil-pen"></i></button>
-                        <button class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',product.id)"><i class="uil text-danger uil-trash"></i></button>
+                        <button v-if="heCan('Update Product')" class="border-0 bg-transparent rounded-1 p-1 px-2 update" data-bs-toggle="modal" data-bs-target="#event" @click="to('edit',product.id)"><i class="uil text-warning uil-pen"></i></button>
+                        <button v-if="heCan('Delete Product')" class="border-0 bg-transparent rounded-1 p-1 px-2 delete" data-bs-toggle="modal" data-bs-target="#event" @click="to('delete',product.id)"><i class="uil text-danger uil-trash"></i></button>
                     </div>
                 </div>
             </div>
@@ -103,6 +103,8 @@
 import { useBranchStore } from '../stores/branchStore';
 import { useAuthStore } from '../stores/authStore';
 import { useProductStore } from '../stores/productStore';
+
+import { can } from '../middlewares/can'
 
 export default {
     data(){
@@ -236,6 +238,9 @@ export default {
                     this.to_edit.newImages.splice(index,1);
                     break;
             }
+        },
+        heCan(permission){
+            return can(permission)
         }
         
     }

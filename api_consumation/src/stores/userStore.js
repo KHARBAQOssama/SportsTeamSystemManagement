@@ -4,6 +4,7 @@ import api from '@/api'
 export const useUserStore = defineStore('user', {
   state: () => ({
     users : [],
+    permissions : [],
     message: 'null',
     user:null,
     currentUser:null
@@ -18,6 +19,27 @@ export const useUserStore = defineStore('user', {
               console.log(result.data)
                 this.users = result.data
             }).catch((err) => {
+              if(err.response.status == 404){
+                router.push('/404');
+              }
+              if(err.response.status == 403){
+                router.push('/403');
+              }
+                console.log(err.response.status);
+            });
+    },
+    fetchPermissions() {
+      api.get('/permission')
+            .then((result) => {
+              console.log(result.data)
+                this.permissions = result.data
+            }).catch((err) => {
+              if(err.response.status == 404){
+                router.push('/404');
+              }
+              if(err.response.status == 403){
+                router.push('/403');
+              }
                 console.log(err);
             });
     },
@@ -29,12 +51,29 @@ export const useUserStore = defineStore('user', {
         this.message = response.data.message;
       })
       .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
         console.log(error.data);
       })
     },
 
     async getUser(user) {
-      const response = await api.get('/user/'+user, )
+      const response = await api.get('/user/'+user, ).then((response)=>{
+        console.log(response.data.message);
+        this.message = response.data.message;
+      })
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+      })
       this.user = response.data
       console.log(this.user)
     },
@@ -49,7 +88,14 @@ export const useUserStore = defineStore('user', {
         this.message = response.data.message
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(error)})
     },
 
     async updateSelfImage(image) {
@@ -58,6 +104,12 @@ export const useUserStore = defineStore('user', {
         console.log(response)
       })
       .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
         console.log(error)
       })
     },
@@ -67,7 +119,14 @@ export const useUserStore = defineStore('user', {
         this.message = response.data.message
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(error)})
     },
 
     async updateSelf(data) {
@@ -76,14 +135,43 @@ export const useUserStore = defineStore('user', {
         this.user = response.data.user
         console.log(response)
       })
-      .catch((error)=>{console.log(error)})
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(error)})
     },
 
+    
+    async assignPermissions(id,data){
+      await api.post(`assign/permission/${id}`,data).then((response)=>{
+        this.message = response.data.message
+        this.user = response.data.user
+        console.log(response)
+      })
+      .catch((error)=>{
+        if(err.response.status == 404){
+          router.push('/404');
+        }
+        if(err.response.status == 403){
+          router.push('/403');
+        }
+        console.log(error)})
+    },
     async handleErrors(promise) {
         try {
           const response = await promise;
           return response;
         } catch (err) {
+          if(err.response.status == 404){
+            router.push('/404');
+          }
+          if(err.response.status == 403){
+            router.push('/403');
+          }
           console.log(err);
           this.message = err.response?.data?.message || 'Something went wrong';
         }

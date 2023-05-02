@@ -10,9 +10,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
         return response()->json(Reservation::all());
@@ -54,14 +56,11 @@ class ReservationController extends Controller
         $decision = $request->input('decision');
         if($decision == 'cancel'){
             $reservation->update(['status'=>'Canceled']);
-            // $game->update([
-            //     'seats_available' => $game->seats_available + 1
-            // ]);
         }else if($decision == 'confirm'){
             $reservation->update(['status'=>'Confirmed']);
         }
 
-        return response()->json(['success'=>'success operation']);
+        return response()->json(['message'=>'success operation']);
     }
     /**
      * Display the specified resource.
