@@ -42,3 +42,5 @@ and PHP OOP and SQL for the back-end.
 - As an admin, I want to be able to add and edit content, so that I can ensure that the website is up-to-date and accurate.
 - As an admin, I want to be able to manage user accounts, so that I can ensure that only authorized users have access to the website's features.
 - As an admin, I want to be able to create and assign roles to sub-admins, so that I can delegate responsibilities to the appropriate users.
+
+Yassine
